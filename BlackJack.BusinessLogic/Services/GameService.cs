@@ -390,6 +390,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
+
         //public async Task<MoreOrEnoughGameView> MoreOrEnough(bool takeCard = false)
         //{
         //    bool isGameEnded = await IsGameEnded(takeCard);
