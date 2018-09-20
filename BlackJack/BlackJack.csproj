@@ -262,9 +262,10 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Game\Start.cshtml" />
-    <Content Include="Views\Game\MoreOrEnough.cshtml" />
-    <Content Include="Views\Game\History.cshtml" />
-    <Content Include="Views\Game\Play.cshtml" />
+    <Content Include="Views\Game\_Play.cshtml" />
+    <Content Include="Views\Game\_History.cshtml" />
+    <Content Include="Views\Game\_More.cshtml" />
+    <Content Include="Views\Game\_Enough.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

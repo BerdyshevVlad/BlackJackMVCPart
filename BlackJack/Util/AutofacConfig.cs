@@ -25,9 +25,10 @@ namespace BlackJack.Util
             //builder.RegisterType<CardRepository>().As<ICardRepository>().WithParameter("connectionString", connectionString);
             //builder.RegisterType<PlayerCardRepository>().As<IPlayerCardRepository>().WithParameter("connectionString", connectionString);
             //builder.RegisterType<PlayerRepository>().As<IPlayerRepository>().WithParameter("connectionString", connectionString);
-            //builder.RegisterType<GameService>().As<GameService>();
+            //builder.RegisterType<GameService>().As<IGameService>();
 
-            builder.RegisterType<GameService>().As<GameService>();
+
+            builder.RegisterType<GameService>().As<IGameService>();
             builder.RegisterType<CardRepository>().As<ICardRepository>().WithParameter("context", new BlackJackContext());
             builder.RegisterType<PlayerCardRepository>().As<IPlayerCardRepository>().WithParameter("context", new BlackJackContext());
             builder.RegisterType<PlayerRepository>().As<IPlayerRepository>().WithParameter("context", new BlackJackContext());

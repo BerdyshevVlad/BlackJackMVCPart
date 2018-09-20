@@ -15,13 +15,13 @@
             <tr>
                 <td>
                     @item.Name
-                <td>
-                    @foreach (var t in item.Cards)
-                    {
-                        @t.Value
-                        <span>, </span>
-                    }
-                </td>
+                    <td>
+                        @foreach (var t in item.Cards)
+                        {
+                            @t.Value
+                            <span>, </span>
+                        }
+                    </td>
                 </td>
             </tr>
         }
@@ -36,9 +36,9 @@
             <tr>
                 <td>
                     @item.Name:
-                <td>
-                    @item.Score
-                </td>
+                    <td>
+                        @item.Score
+                    </td>
                 </td>
             </tr>
         }
@@ -61,3 +61,4 @@
         var count = 0;
         alert("REFRESH");
     </script>*@
+

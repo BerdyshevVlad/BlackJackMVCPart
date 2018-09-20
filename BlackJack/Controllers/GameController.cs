@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.BusinessLogic.Services;
 using BlackJack.ViewModels;
 using ExceptionLoggers;
@@ -12,9 +13,9 @@ namespace BlackJack.Controllers
 {
     public class GameController : Controller
     {
-        private readonly GameService _gameService;
+        private readonly IGameService _gameService;
 
-        public GameController(GameService gameService)
+        public GameController(IGameService gameService)
         {
             _gameService = gameService;
         }
@@ -23,7 +24,6 @@ namespace BlackJack.Controllers
         [ExceptionLogger]
         public async Task<ActionResult> Start()
         {
-            await _gameService.SetDeck();
 
             return View();
         }
@@ -35,7 +35,7 @@ namespace BlackJack.Controllers
         {
             StartGameView model = await _gameService.Start(botCount);
 
-            return View("Play",model.Players);
+            return View("_Play",model.Players);
         }
 
 
@@ -45,7 +45,7 @@ namespace BlackJack.Controllers
         {
             MoreOrEnoughGameView model =await _gameService.More();
 
-            return PartialView("MoreOrEnough",model.Players);
+            return PartialView("_More",model.Players);
         }
 
 
@@ -55,7 +55,7 @@ namespace BlackJack.Controllers
         {
             MoreOrEnoughGameView model = await _gameService.Enough();
 
-            return PartialView("MoreOrEnough", model.Players);
+            return PartialView("_Enough", model.Players);
         }
 
 
@@ -65,7 +65,7 @@ namespace BlackJack.Controllers
         {
             HistoryGameView model=await _gameService.GetHistory();
 
-            return PartialView("History",model.Players);
+            return PartialView("_History",model.Players);
         }
 
     }

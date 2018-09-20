@@ -10,7 +10,6 @@ namespace BlackJack.BusinessLogic.Interfaces
         Task<int> DefineCurrentGame();
         int DefineCurrentRound();
         Task InitializePlayers(int game);
-        Task<bool> SetDeck();
         Task<GetDeckGameView> GetDeck();
         Task SetBotCount(int botsCount);
         Task<Dictionary<Player, List<Card>>> DefinePlayersFromLastGame();
@@ -23,7 +22,9 @@ namespace BlackJack.BusinessLogic.Interfaces
         Task<StartGameView> Start(int botCount);
         Task<List<PlayerGameViewItem>> GetScoreCount();
         Task TakeCardIfNotEnough(bool takeCard);
-        Task<MoreOrEnoughGameView> MoreOrEnough(bool takeCard = false);
+        //Task<MoreOrEnoughGameView> MoreOrEnough(bool takeCard = false);
+        Task<MoreOrEnoughGameView> More();
+        Task<MoreOrEnoughGameView> Enough();
         Task<bool> IsGameEnded(bool takeCard);
         Task<bool> IsUserBusted();
         Task<List<PlayerGameViewItem>> DefineTheWinner();
