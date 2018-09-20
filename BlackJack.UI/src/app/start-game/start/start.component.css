@@ -1,0 +1,40 @@
+li {
+  list-style-type: none;
+}
+
+input {
+  width: 20%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.roundStartedMessage {
+  text-align: center;
+}
+
+.newGame:hover, .newRound:hover {
+  background-color: #4CAF50;
+}
+
+.moreBtn, .stayBtn {
+  margin: 15px;
+}
+
+
+.col-centered {
+  float: none;
+  margin:auto;
+}
+
+.newRoundBtn, .newGameBtn {
+  margin: 10px;
+}
+
+.errorMessageSetBotCount {
+  text-align: center;
+  color: red;
+}

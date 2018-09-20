@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Start";
+}
+
+<h2>Start</h2>
+
+<div id="result"></div>
+
+
+    @using (Ajax.BeginForm("Start", "Game", FormMethod.Post, new AjaxOptions { UpdateTargetId = "result2" }, new { @class = "form-inline" }))
+    {
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="inputPassword2" class="sr-only">Choose number of boots!</label>
+            <input type="number" name="botCount" min="1" max="5" class="form-control" id="inputPassword2" placeholder="Enter bot number...">
+        </div>
+        <input type="submit" class="btn btn-primary mb-2" value="Confirm" />
+
+    }
+@*</div>*@

@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "Play";
+}
+
+<h2>Play</h2>
+
+<h2>HandOverCards</h2>
+
+<div id="result">
+    <table class="table">
+        <h1>Cards:</h1>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                <td>
+                    @foreach (var t in item.Cards)
+                    {
+                        @t.Value
+                        <span>, </span>
+                    }
+                </td>
+                </td>
+            </tr>
+        }
+    </table>
+
+
+
+    <table class="table">
+        <h1>Total scores:</h1>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name:
+                <td>
+                    @item.Score
+                </td>
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>
+
+@using (Ajax.BeginForm("More", "Game", FormMethod.Post, new AjaxOptions { UpdateTargetId = "result" }))
+{
+    <button name="takeCard" type="submit" value="true" id="Draw">More</button>
+}
+
+@using (Ajax.BeginForm("Enough", "Game", FormMethod.Post, new AjaxOptions { UpdateTargetId = "result" }))
+{
+
+    <button name="takeCard" type="submit" value="false">Enough</button>
+}
+
+@*<script>
+        var count = 0;
+        alert("REFRESH");
+    </script>*@

@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\ValuesController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="src\app\cardData.ts" />
+    <None Remove="src\app\Interfaces\gameHistory.ts" />
+    <None Remove="src\app\Interfaces\playerData.ts" />
+    <None Remove="src\app\Interfaces\playersCards.ts" />
+    <None Remove="src\app\Interfaces\Round.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.5" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="src\app\Interfaces\cardData.ts" />
+    <TypeScriptCompile Include="src\app\Interfaces\gameHistory.ts" />
+    <TypeScriptCompile Include="src\app\Interfaces\playerData.ts" />
+    <TypeScriptCompile Include="src\app\Interfaces\playersCards.ts" />
+    <TypeScriptCompile Include="src\app\Interfaces\Round.ts" />
+  </ItemGroup>
+
+</Project>
