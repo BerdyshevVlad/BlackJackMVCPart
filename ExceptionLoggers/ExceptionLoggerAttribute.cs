@@ -18,7 +18,7 @@ namespace ExceptionLoggers
             Date = DateTime.Now
         };
 
-        using (BlackJackContext db = new BlackJackContext())
+        using (BlackJackContext db = new BlackJackContext("BlackJackContext"))
         {
             db.ExceptionDetails.Add(exceptionDetail);
             db.SaveChanges();

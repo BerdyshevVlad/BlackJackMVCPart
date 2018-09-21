@@ -1,0 +1,17 @@
+﻿h2 {
+    text-align: center;
+}
+
+.botCount, .userName {
+    margin: auto;
+}
+
+.myConfirm {
+    display: block !important;
+    margin: auto;
+}
+
+.errorBotCountMessage {
+    text-align: center;
+    color: red;
+}

@@ -40,9 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnoughGameView.cs" />
     <Compile Include="GetDeckGameView.cs" />
     <Compile Include="HistoryGameView.cs" />
-    <Compile Include="MoreOrEnoughGameView.cs" />
+    <Compile Include="MoreGameView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartGameView.cs" />
   </ItemGroup>

@@ -9,7 +9,7 @@ namespace BlackJack.DataAccess.Repositories
 {
     public class PlayerRepository : BaseRepository<Player>, IPlayerRepository
     {
-        public PlayerRepository(BlackJackContext context):base(new Context.MVC.BlackJackContext())
+        public PlayerRepository(BlackJackContext context):base(context)
         {
         }
 

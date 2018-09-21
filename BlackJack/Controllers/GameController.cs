@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using BlackJack.BusinessLogic.Interfaces;
-using BlackJack.BusinessLogic.Services;
 using BlackJack.ViewModels;
 using ExceptionLoggers;
 
@@ -21,6 +17,12 @@ namespace BlackJack.Controllers
         }
 
 
+        [ExceptionLogger]
+        public ActionResult Index()
+        {
+            return View();
+        }
+
 
         [ExceptionLogger]
         public async Task<ActionResult> Start()
@@ -33,11 +35,11 @@ namespace BlackJack.Controllers
 
         [ExceptionLogger]
         [HttpPost]
-        public async Task<ActionResult> Start(int botCount)
+        public async Task<ActionResult> Start(string botCount,string userName)
         {
-            StartGameView model = await _gameService.Start(botCount);
+            StartGameView model = await _gameService.Start(Int32.Parse(botCount), userName);
 
-            return View("_Play",model.Players);
+            return PartialView("_Play",model.Players);
         }
 
 
@@ -45,9 +47,9 @@ namespace BlackJack.Controllers
         [HttpPost]
         public async Task<ActionResult> More()
         {
-            MoreOrEnoughGameView model =await _gameService.More();
+            MoreGameView model =await _gameService.More();
 
-            return PartialView("_More",model.Players);
+            return PartialView("_Play",model.Players);
         }
 
 
@@ -55,9 +57,9 @@ namespace BlackJack.Controllers
         [HttpPost]
         public async Task<ActionResult> Enough()
         {
-            MoreOrEnoughGameView model = await _gameService.Enough();
+            EnoughGameView model = await _gameService.Enough();
 
-            return PartialView("_Enough", model.Players);
+            return PartialView("_Play", model.Players);
         }
 
 

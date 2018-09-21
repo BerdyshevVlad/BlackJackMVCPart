@@ -3,11 +3,8 @@
     ViewBag.Title = "Play";
 }
 
-<h2>Play</h2>
-
-<h2>HandOverCards</h2>
-
 <div id="result">
+    <h2>HandOverCards</h2>
     <table class="table">
         <h1>Cards:</h1>
         @foreach (var item in Model)
@@ -44,21 +41,44 @@
         }
     </table>
 
+   
+
 </div>
 
-@using (Ajax.BeginForm("More", "Game", FormMethod.Post, new AjaxOptions { UpdateTargetId = "result" }))
-{
-    <button name="takeCard" type="submit" value="true" id="Draw">More</button>
-}
+@*<button name="takeCard" type="submit" value="true" id="more">More</button>
+<button name="takeCard" type="submit" value="false" id="enough">Enough</button>
 
-@using (Ajax.BeginForm("Enough", "Game", FormMethod.Post, new AjaxOptions { UpdateTargetId = "result" }))
-{
+<script type="text/javascript">
+    $(document).ready(function () {
 
-    <button name="takeCard" type="submit" value="false">Enough</button>
-}
+        $('#more').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("More", "Game")',
+            success: function(data){
+                $('#result').replaceWith(data);
+                alert("Refresh");
+            }
+            });
+        });
 
-@*<script>
-        var count = 0;
-        alert("REFRESH");
-    </script>*@
+        $('#enough').click(function () {
+            $('#enough').prop('disabled', true);
+            $('#more').prop('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Enough", "Game")',
+                success: function(data){
+                    $('#result').replaceWith(data);
+                    alert("Refresh");
+                }
+            });
+        });
+
+
+
+
+    });
+</script>*@
+
 

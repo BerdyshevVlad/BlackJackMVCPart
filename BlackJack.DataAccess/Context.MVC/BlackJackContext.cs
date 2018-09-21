@@ -13,7 +13,7 @@ namespace BlackJack.DataAccess.Context.MVC
             Database.SetInitializer<BlackJackContext>(new ContextInitializer());
         }
 
-        public BlackJackContext() : base("BlackJackContext")
+        public BlackJackContext(string connectionString) : base(connectionString)
         { }
 
         public DbSet<Card> Cards { get; set; }

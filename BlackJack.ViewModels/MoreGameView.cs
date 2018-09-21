@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace BlackJack.ViewModels
 {
-    public class MoreOrEnoughGameView
+    public class MoreGameView
     {
         public List<PlayerGameViewItem> Players { get; set; }
 
-        public MoreOrEnoughGameView()
+        public MoreGameView()
         {
-            Players=new List<PlayerGameViewItem>();
+            Players = new List<PlayerGameViewItem>();
         }
     }
 }

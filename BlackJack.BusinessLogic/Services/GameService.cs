@@ -72,14 +72,14 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task InitializePlayers(int game)
+        public async Task InitializePlayers(int game,string userName)
         {
             var dealer = new Player();
             dealer.Name = "Dealer";
             dealer.PlayerType = _dealerPlayerType;
             dealer.GameNumber = game;
             var playerPerson = new Player();
-            playerPerson.Name = "You";
+            playerPerson.Name = userName;
             playerPerson.PlayerType = _personPlayerType;
             playerPerson.GameNumber = game;
 
@@ -120,10 +120,10 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task SetBotCount(int botsCount)
+        public async Task SetBotCount(int botsCount,string userName)
         {
             int gameNumber = await DefineCurrentGame();
-            await InitializePlayers(gameNumber);
+            await InitializePlayers(gameNumber, userName);
             try
             {
                 for (int i = 0; i < botsCount; i++)
@@ -229,10 +229,9 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task<StartGameView> Start(int botCount)
+        public async Task<StartGameView> Start(int botCount,string userName)
         {
-            //await SetDeck();
-            await SetBotCount(botCount);
+            await SetBotCount(botCount, userName);
 
             int handOverCount = 2;
             _round++;
@@ -320,73 +319,17 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-
-        //public async Task<MoreOrEnoughGameView> MoreOrEnough(bool takeCard = false)
-        //{
-        //    bool isGameEnded = await IsGameEnded(takeCard);
-
-
-        //    for (; isGameEnded == false;)
-        //    {
-        //        var isUserBusted = await IsUserBusted();
-        //        if (takeCard && !isUserBusted)
-        //        {
-        //            await TakeCardIfNotEnough(takeCard);
-        //            isGameEnded = await IsGameEnded(takeCard);
-        //            isUserBusted = await IsUserBusted();
-        //            if (!isUserBusted)
-        //            {
-        //                break;
-        //            }
-
-        //            takeCard = false;
-        //        }
-
-        //        if (!takeCard)
-        //        {
-        //            await TakeCardIfNotEnough(takeCard);
-        //            isGameEnded = await IsGameEnded(takeCard);
-        //        }
-        //    }
-
-        //    Dictionary<Player, List<Card>> playerCardsLastGame = await DefinePlayersFromLastGame();
-
-        //    List<PlayerGameViewItem> playerViewItemList = new List<PlayerGameViewItem>();
-
-        //    foreach (var player in playerCardsLastGame)
-        //    {
-        //        PlayerGameViewItem playerViewItem = new PlayerGameViewItem();
-        //        playerViewItem.Id = player.Key.Id;
-        //        playerViewItem.Name = player.Key.Name;
-        //        playerViewItem.GameNumber = player.Key.GameNumber;
-        //        playerViewItem.PlayerType = player.Key.PlayerType;
-        //        playerViewItem.Score = player.Value.Sum(c=>c.Value);
-        //        foreach (var card in player.Value)
-        //        {
-        //            playerViewItem.Cards.Add(new CardViewItem { Id = card.Id, Value = card.Value });
-        //        }
-
-        //        playerViewItemList.Add(playerViewItem);
-        //    }
-
-        //    CountSum(ref playerViewItemList);
-
-        //    MoreOrEnoughGameView moreOrEnoughViewModel = new MoreOrEnoughGameView();
-        //    moreOrEnoughViewModel.Players = playerViewItemList;
-
-        //    return moreOrEnoughViewModel;
-        //}
-
-
         /////////////////////////////////////////////////////////
         ///
 
-        public async Task<MoreOrEnoughGameView> More()
+        public async Task<MoreGameView> More()
         {
-            bool isGameEnded = await IsGameEnded(false);
+            bool takeCard=false;
+            bool more = true;
+            bool isGameEnded = await IsGameEnded(takeCard);
             if (!isGameEnded)
             {
-                await TakeCardIfNotEnough(true);
+                await TakeCardIfNotEnough(more);
             }
             var isUserBusted = await IsUserBusted();
             if (isUserBusted)
@@ -416,7 +359,7 @@ namespace BlackJack.BusinessLogic.Services
 
             CountSum(ref playerViewItemList);
 
-            MoreOrEnoughGameView moreOrEnoughViewModel = new MoreOrEnoughGameView();
+            MoreGameView moreOrEnoughViewModel = new MoreGameView();
             moreOrEnoughViewModel.Players = playerViewItemList;
 
             return moreOrEnoughViewModel;
@@ -424,13 +367,15 @@ namespace BlackJack.BusinessLogic.Services
 
 
 
-        public async Task<MoreOrEnoughGameView> Enough()
+        public async Task<EnoughGameView> Enough()
         {
-            bool isGameEnded = await IsGameEnded(true);
+            bool takeCard = true;
+            bool enough = false;
+            bool isGameEnded = await IsGameEnded(takeCard);
             for (; !isGameEnded;)
             {
-                await TakeCardIfNotEnough(false);
-                isGameEnded = await IsGameEnded(true);
+                await TakeCardIfNotEnough(enough);
+                isGameEnded = await IsGameEnded(takeCard);
             }
 
             Dictionary<Player, List<Card>> playerCardsLastGame = await DefinePlayersFromLastGame();
@@ -455,7 +400,7 @@ namespace BlackJack.BusinessLogic.Services
 
             CountSum(ref playerViewItemList);
 
-            MoreOrEnoughGameView moreOrEnoughViewModel = new MoreOrEnoughGameView();
+            EnoughGameView moreOrEnoughViewModel = new EnoughGameView();
             moreOrEnoughViewModel.Players = playerViewItemList;
 
             return moreOrEnoughViewModel;
@@ -480,8 +425,8 @@ namespace BlackJack.BusinessLogic.Services
             var isGameEnded = cardCount.TrueForAll(c => c >= 17);
             PlayerGameViewItem playerViewItem =
                 playerViewItemList.SingleOrDefault(x => x.PlayerType == _personPlayerType);
-            int cardSum = playerViewItem.Cards.Sum(c => c.Value);
-            if (cardSum < 21 && !takeCard)
+            int cardSumPlayerPerson = playerViewItem.Cards.Sum(c => c.Value);
+            if (cardSumPlayerPerson < 21 && !takeCard)
             {
                 isGameEnded = false;
             }
