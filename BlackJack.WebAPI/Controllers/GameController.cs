@@ -1,14 +1,19 @@
-﻿using BlackJack.BusinessLogic.Interfaces;
-using BlackJack.ViewModels;
-using ExceptionLoggers;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Description;
+using BlackJack.BusinessLogic.Interfaces;
+using BlackJack.ViewModels;
+using ExceptionLoggers;
+using Newtonsoft.Json;
 
-namespace BlackJack.WebAPI.Controllers
+namespace BlackJack.WebApi.Controllers
 {
-    [Route("api/game")]
+    [RoutePrefix("api/game")]
     public class GameController : ApiController
     {
         private readonly IGameService _gameService;
@@ -17,27 +22,21 @@ namespace BlackJack.WebAPI.Controllers
             _gameService = gameService;
         }
 
-        [ExceptionLogger]
-        public IEnumerable<string> Index()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-
-        [ExceptionLogger]
-        [HttpGet]
-        [Route("start")]
-        public async Task<StartGameView> Start()
-        {
-            //StartGameView model = await _gameService.Start(Int32.Parse(botCount), userName);
-
-            //return model;
-            return  new StartGameView();
-        }
-
-
-        [ExceptionLogger]
         [HttpPost]
+        public async Task<StartGameView> Start([FromBody] SetNameAndBotCount json)
+        {
+
+            StartGameView model = await _gameService.Start(json);
+
+            return model;
+        }
+
+
+
+        [HttpGet]
+        [Route("more")]
+        [ResponseType(typeof(MoreGameView))]
         public async Task<MoreGameView> More()
         {
             MoreGameView model = await _gameService.More();
@@ -46,8 +45,10 @@ namespace BlackJack.WebAPI.Controllers
         }
 
 
-        [ExceptionLogger]
-        [HttpPost]
+
+        [HttpGet]
+        [Route("enough")]
+        [ResponseType(typeof(EnoughGameView))]
         public async Task<EnoughGameView> Enough()
         {
             EnoughGameView model = await _gameService.Enough();
@@ -56,8 +57,9 @@ namespace BlackJack.WebAPI.Controllers
         }
 
 
-        [ExceptionLogger]
         [HttpGet]
+        [Route("history")]
+        [ResponseType(typeof(HistoryGameView))]
         public async Task<HistoryGameView> History()
         {
             HistoryGameView model = await _gameService.GetHistory();

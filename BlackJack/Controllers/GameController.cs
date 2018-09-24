@@ -1,19 +1,20 @@
-﻿using System;
+﻿using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.ViewModels;
 using ExceptionLoggers;
+using Newtonsoft.Json;
 
 namespace BlackJack.Controllers
 {
     public class GameController : Controller
     {
-        private readonly IGameService _gameService;
+        private const string baseUrl= "http://localhost:50610/";
 
-        public GameController(IGameService gameService)
+        public GameController()
         {
-            _gameService = gameService;
+
         }
 
 
@@ -32,34 +33,53 @@ namespace BlackJack.Controllers
         }
 
 
-
         [ExceptionLogger]
         [HttpPost]
-        public async Task<ActionResult> Start(string botCount,string userName)
+        public async Task<ActionResult> Start(SetNameAndBotCount userNameAndBotCount)
         {
-            StartGameView model = await _gameService.Start(Int32.Parse(botCount), userName);
 
-            return PartialView("_Play",model.Players);
+            using (var http = new HttpClient())
+            {
+                string json = JsonConvert.SerializeObject(userNameAndBotCount);
+                HttpContent content = new StringContent(json);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpResponseMessage response = await http.PostAsync(baseUrl+"api/game/start", content);
+
+                StartGameView model = response.Content.ReadAsAsync<StartGameView>().Result;
+
+                return PartialView("_Play", model.Players);
+            }
         }
 
 
         [ExceptionLogger]
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResult> More()
         {
-            MoreGameView model =await _gameService.More();
+            using (var http = new HttpClient())
+            {
+                HttpResponseMessage response = await http.GetAsync(baseUrl+"api/game/more");
 
-            return PartialView("_Play",model.Players);
+                StartGameView model = response.Content.ReadAsAsync<StartGameView>().Result;
+
+                return PartialView("_Play", model.Players);
+            }
         }
 
 
         [ExceptionLogger]
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResult> Enough()
         {
-            EnoughGameView model = await _gameService.Enough();
+            using (var http = new HttpClient())
+            {
+                HttpResponseMessage response = await http.GetAsync(baseUrl+"api/game/enough");
+                string statusCode = response.StatusCode.ToString();
 
-            return PartialView("_Play", model.Players);
+                StartGameView model = response.Content.ReadAsAsync<StartGameView>().Result;
+
+                return PartialView("_Play", model.Players);
+            }
         }
 
 
@@ -67,9 +87,14 @@ namespace BlackJack.Controllers
         [HttpGet]
         public async Task<ActionResult> History()
         {
-            HistoryGameView model=await _gameService.GetHistory();
+            using (var http = new HttpClient())
+            {
+                HttpResponseMessage response = await http.GetAsync(baseUrl+ "api/game/history");
 
-            return PartialView("_History",model.Players);
+                StartGameView model = response.Content.ReadAsAsync<StartGameView>().Result;
+
+                return PartialView("_History", model.Players);
+            }
         }
 
     }

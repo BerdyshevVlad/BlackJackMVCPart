@@ -21,7 +21,7 @@ namespace BlackJack.BusinessLogic.Services
         public readonly string _personPlayerType = "Person";
         public readonly string _dealerPlayerType = "Dealer";
 
-        public GameService(ICardRepository cardRepository, IPlayerRepository playerRepository,IPlayerCardRepository playerCardRepository)
+        public GameService(ICardRepository cardRepository, IPlayerRepository playerRepository, IPlayerCardRepository playerCardRepository)
         {
             _cardRepository = cardRepository;
             _playerRepository = playerRepository;
@@ -229,9 +229,9 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task<StartGameView> Start(int botCount,string userName)
+        public async Task<StartGameView> Start(SetNameAndBotCount usSetNameAndBotCount)
         {
-            await SetBotCount(botCount, userName);
+            await SetBotCount(usSetNameAndBotCount.BotCount, usSetNameAndBotCount.UserName);
 
             int handOverCount = 2;
             _round++;
@@ -472,7 +472,6 @@ namespace BlackJack.BusinessLogic.Services
             var history = new HistoryGameView();
             for (int i = 1; i <= maxRound; i++)
             {
-
                 List<PlayerCard> playersList = await _playerRepository.GetPlayersByRound(i);
                 foreach (var item in playersList)
                 {
@@ -494,8 +493,6 @@ namespace BlackJack.BusinessLogic.Services
                             Value = card.Value
                         });
                     }
-
-
                     history.Players.Add(playerModel);
                 }
             }

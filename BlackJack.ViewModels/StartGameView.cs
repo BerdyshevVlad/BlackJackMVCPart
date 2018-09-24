@@ -37,4 +37,10 @@ namespace BlackJack.ViewModels
         public int Id { get; set; }
         public int Value { get; set; }
     }
+
+    public class SetNameAndBotCount
+    {
+        public int BotCount { get; set; }
+        public string UserName { get; set; }
+    }
 }

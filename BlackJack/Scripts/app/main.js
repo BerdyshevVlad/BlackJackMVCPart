@@ -5,7 +5,7 @@
     }
     $.ajax({
         type: 'POST',
-        url: 'api/Game/Start',
+        url: 'http://localhost:50610/api/game/start',
         data: data,
         success: function (data) {
             $('#result').replaceWith(data);

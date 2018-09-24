@@ -19,7 +19,7 @@ namespace BlackJack.BusinessLogic.Interfaces
         Task GiveCardToPlayer(Player player, Card card);
         Task GiveCardToEachPlayer();
         void CountSum(ref List<PlayerGameViewItem> playerViewItemList);
-        Task<StartGameView> Start(int botCount,string userName);
+        Task<StartGameView> Start(SetNameAndBotCount userNameAndBotCount);
         Task<List<PlayerGameViewItem>> GetScoreCount();
         Task TakeCardIfNotEnough(bool takeCard);
         Task<MoreGameView> More();

@@ -11,86 +11,11 @@
         <input id="userName" type="text" name="userName" class="form-control userName" placeholder="Enter name...">
     </div>
     <div id="errorBotCountMessage" class="errorBotCountMessage"></div>
-    <input id="confirm" type="submit" class="btn btn-primary mb-2 myConfirm" value="Confirm" onclick="Start()"/>
+    <input id="confirm" type="submit" class="btn btn-primary mb-2 myConfirm" value="Confirm" onclick="OnConfirm()" />
 </div>
 
-<button type="button" class="btn btn-success" id="more">More</button>
-<button type="button" class="btn btn-success" id="enough">Enough</button>
+<button type="button" class="btn btn-success" id="more" onclick="OnMore()">More</button>
+<button type="button" class="btn btn-success" id="enough" onclick="OnEnough()">Enough</button>
 
 @Scripts.Render("~/scripts/jquery-3.3.1.js")
 @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
-
-
-@*<script type="text/javascript">
-    $(document).ready(function () {
-
-        $('#more').hide();
-        $('#enough').hide();
-
-        $('#confirm').click(function () {
-
-            var botCountValue = $('#botCount').val();
-            var userNameValue = $('#userName').val();
-
-            function isBotCountCorrect() {
-                if (botCountValue > 5 || botCountValue < 1 ) {
-                    $('#errorBotCountMessage').append("Please, enter number from 1 to 5 ");
-                }
-            }
-           
-            function isUserNameExist() {
-                if (userNameValue == "") {
-                    $('#errorBotCountMessage').append("Please, enter you name");
-                }
-            }
-
-            if (botCountValue > 5 || botCountValue < 1 || userNameValue == "") {
-                $('#errorBotCountMessage').text("");
-                isBotCountCorrect();
-                isUserNameExist();
-                
-                return;
-            }
-           
-
-                var data = { botCount: botCountValue, userName: userNameValue };
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("Start", "Game")',
-                data: data,
-                success: function(data){
-                    $('#result').replaceWith(data);
-
-                }
-            });
-            $('#more').show();
-            $('#enough').show();
-        });
-
-
-
-
-        $('#more').click(function () {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("More", "Game")',
-                success: function(data){
-                    $('#result').replaceWith(data);
-                }
-            });
-        });
-
-        $('#enough').click(function () {
-            $('#enough').prop('disabled', true);
-            $('#more').prop('disabled', true);
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("Enough", "Game")',
-                success: function(data){
-                    $('#result').replaceWith(data);
-                }
-            });
-        });
-
-    });
-</script>*@

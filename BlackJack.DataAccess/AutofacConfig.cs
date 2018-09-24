@@ -14,11 +14,11 @@ namespace BlackJack.DataAccess
     {
         public static void Configure(ContainerBuilder builder, string connectionString)
         {
-            builder.RegisterGeneric(typeof(BaseRepository<>)).As(typeof(IBaseRepository<>)).WithParameter("connectionString", connectionString);
-            builder.RegisterType<CardRepository>().As<ICardRepository>().WithParameter("connectionString", connectionString);
-            builder.RegisterType<PlayerCardRepository>().As<IPlayerCardRepository>().WithParameter("connectionString", connectionString);
-            builder.RegisterType<PlayerRepository>().As<IPlayerRepository>().WithParameter("connectionString", connectionString);
-            builder.RegisterType<BlackJackContext>().As<BlackJackContext>().WithParameter("connectionString", connectionString);
+            builder.RegisterType<BlackJackContext>().AsSelf().WithParameter("connectionString", connectionString);
+            builder.RegisterGeneric(typeof(BaseRepository<>)).As(typeof(IBaseRepository<>));
+            builder.RegisterType<CardRepository>().As<ICardRepository>();
+            builder.RegisterType<PlayerCardRepository>().As<IPlayerCardRepository>();
+            builder.RegisterType<PlayerRepository>().As<IPlayerRepository>();
         }
     }
 }
