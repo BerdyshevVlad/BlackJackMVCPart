@@ -26,8 +26,6 @@ namespace BlackJack
                       "~/Content/site.css",
                       "~/Content/index.css",
                       "~/Content/start.css"));
-
-
         }
     }
 }
