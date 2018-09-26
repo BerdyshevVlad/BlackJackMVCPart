@@ -587,7 +587,6 @@
     </Content>
     <Content Include="Scripts\app\main.js" />
     <Content Include="Scripts\app\play.js" />
-    <Content Include="Scripts\app\start.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />

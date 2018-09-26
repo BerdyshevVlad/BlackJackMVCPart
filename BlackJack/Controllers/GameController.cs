@@ -14,11 +14,6 @@ namespace BlackJack.Controllers
     {
         private const string BASE_URL = "http://localhost:50610/";
 
-        public GameController()
-        {
-
-        }
-
 
         [ExceptionLogger]
         public ActionResult Index()
