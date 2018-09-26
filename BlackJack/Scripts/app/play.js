@@ -49,31 +49,30 @@ function GetPlayersScors() {
         arr.push(this.id);
     });
 
-    var array = [];
+    var playerScoreList = [];
    
     for (var i = 0; i < arr.length; i += 2) {
 
         var playerName = $('#' + arr[i]).text().replace(/ /g, '');
         var playerScore = $('#' + arr[i + 1]).text().replace(/ /g, '');
-            array.push({ name: playerName, score: playerScore });
+        playerScoreList.push({ name: playerName, score: playerScore });
     }
 
-    return array;
+    return playerScoreList;
 }
 
 
 function DefineTheWinners() {
 
     var maxWinScore = 21;
-    var array = GetPlayersScors();
+    var playerScoreList = GetPlayersScors();
     var players = [];
-    for (var k = 0; k < array.length; k++) {
-        if (array[k].score <= maxWinScore) {
-            players.push(array[k]);
+    for (var k = 0; k < playerScoreList.length; k++) {
+        if (playerScoreList[k].score <= maxWinScore) {
+            players.push(playerScoreList[k]);
         }
     }
 
-    var maxWinScore = 21;
     var maxScore = Math.max.apply(Math, players.map(function (o) { return o.score; }));
 
     var winners = [];

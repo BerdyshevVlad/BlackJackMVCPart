@@ -1,10 +1,14 @@
 ﻿function OnConfirm() {
 
+    var maxBotCount = 5;
+    var minBotCount = 1;
+
     var botCountValue = $('#botCount').val();
     var userNameValue = $('#userName').val();
 
+
     function isBotCountCorrect() {
-        if (botCountValue > 5 || botCountValue < 1) {
+        if (botCountValue > maxBotCount || botCountValue < minBotCount) {
             $('#errorBotCountMessage').append("Please, enter number from 1 to 5 ");
         }
     }
@@ -15,7 +19,7 @@
         }
     }
 
-    if (botCountValue > 5 || botCountValue < 1 || userNameValue == "") {
+    if (botCountValue > maxBotCount || botCountValue < minBotCount || userNameValue == "") {
         $('#errorBotCountMessage').text("");
         isBotCountCorrect();
         isUserNameExist();
@@ -49,7 +53,4 @@
             }
         });
     }
-
-
-   
 };
