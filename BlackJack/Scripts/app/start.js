@@ -1,8 +1,7 @@
-﻿$('#more').hide();
-$('#enough').hide();
+﻿function OnConfirm() {
+    $('#more').show();
+    $('#enough').show();
 
-
-function OnConfirm() {
     var botCountValue = $('#botCount').val();
     var userNameValue = $('#userName').val();
 

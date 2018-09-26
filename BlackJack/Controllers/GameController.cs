@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -10,7 +12,7 @@ namespace BlackJack.Controllers
 {
     public class GameController : Controller
     {
-        private const string baseUrl= "http://localhost:50610/";
+        private const string baseUrl = "http://localhost:50610/";
 
         public GameController()
         {
@@ -43,7 +45,7 @@ namespace BlackJack.Controllers
                 string json = JsonConvert.SerializeObject(userNameAndBotCount);
                 HttpContent content = new StringContent(json);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                HttpResponseMessage response = await http.PostAsync(baseUrl+"api/game/start", content);
+                HttpResponseMessage response = await http.PostAsync(baseUrl + "api/game/start", content);
 
                 StartGameView model = response.Content.ReadAsAsync<StartGameView>().Result;
 
@@ -58,9 +60,11 @@ namespace BlackJack.Controllers
         {
             using (var http = new HttpClient())
             {
-                HttpResponseMessage response = await http.GetAsync(baseUrl+"api/game/more");
+                HttpResponseMessage response = await http.GetAsync(baseUrl + "api/game/more");
 
                 StartGameView model = response.Content.ReadAsAsync<StartGameView>().Result;
+
+                
 
                 return PartialView("_Play", model.Players);
             }
@@ -73,7 +77,7 @@ namespace BlackJack.Controllers
         {
             using (var http = new HttpClient())
             {
-                HttpResponseMessage response = await http.GetAsync(baseUrl+"api/game/enough");
+                HttpResponseMessage response = await http.GetAsync(baseUrl + "api/game/enough");
                 string statusCode = response.StatusCode.ToString();
 
                 StartGameView model = response.Content.ReadAsAsync<StartGameView>().Result;
@@ -89,13 +93,12 @@ namespace BlackJack.Controllers
         {
             using (var http = new HttpClient())
             {
-                HttpResponseMessage response = await http.GetAsync(baseUrl+ "api/game/history");
+                HttpResponseMessage response = await http.GetAsync(baseUrl + "api/game/history");
 
                 StartGameView model = response.Content.ReadAsAsync<StartGameView>().Result;
 
-                return PartialView("_History", model.Players);
+                return View("History", "", JsonConvert.SerializeObject(model.Players));
             }
         }
-
     }
 }

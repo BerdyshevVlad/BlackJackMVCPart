@@ -1,0 +1,65 @@
+﻿<h2>History</h2>
+
+<div id="example">
+    <div id="grid"></div>
+</div>
+
+<script>
+    var modelJson = @Html.Raw(Json.Encode(@Model));
+    var model = JSON.parse(modelJson);
+
+    $(document).ready(function () {
+
+        $("#grid").kendoGrid({
+            dataSource: {
+                data: model,
+                pageSize: 20
+            },
+            schema: {
+                model:{
+                    id: "Id",
+                    fields: {
+                        Name: { type: "string" },
+                        Score: { type: "number" },
+                        Round: { type: "number" },
+                        Cards: {type: "number"}
+                    }
+                }
+            },
+            height: 550,
+            groupable: true,
+            sortable: true,
+            pageable: {
+                refresh: true,
+                pageSizes: true,
+                buttonCount: 5
+            },
+            columns: [ {
+                field: "Name",
+                title: "Name",
+                width: 240
+            },{
+                    field: "Cards",
+                    template: function(dataItem) {
+                        var html = [];
+
+                        for (var i = 0; i < dataItem.Cards.length; i++) {
+                            html.push('<span>' + dataItem.Cards[i].Value + '</span>');
+                        }
+
+                        return html.join(', ');
+                    },
+                title: "Cards",
+                width: 240
+            },{
+                    field: "Score",
+                    title: "Score",
+                width: 240
+            }, {
+                    field: "Round",
+                    title: "Round",
+                width: 240
+            }]
+        });
+    });
+</script>

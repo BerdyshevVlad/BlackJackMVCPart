@@ -45,40 +45,4 @@
 
 </div>
 
-@*<button name="takeCard" type="submit" value="true" id="more">More</button>
-<button name="takeCard" type="submit" value="false" id="enough">Enough</button>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        $('#more').click(function () {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("More", "Game")',
-            success: function(data){
-                $('#result').replaceWith(data);
-                alert("Refresh");
-            }
-            });
-        });
-
-        $('#enough').click(function () {
-            $('#enough').prop('disabled', true);
-            $('#more').prop('disabled', true);
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("Enough", "Game")',
-                success: function(data){
-                    $('#result').replaceWith(data);
-                    alert("Refresh");
-                }
-            });
-        });
-
-
-
-
-    });
-</script>*@
-
 
