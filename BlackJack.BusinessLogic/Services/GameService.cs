@@ -222,14 +222,17 @@ namespace BlackJack.BusinessLogic.Services
 
         public void CountSum(ref List<PlayerGameViewItem> playerViewItemList)
         {
+            int scoreMaxValue = 21;
+            int aceValueMax = 11;
+            int aceValueMin = 1;
             foreach (var playerCards in playerViewItemList)
             {
                 int sum = 0;
                 for (int i = 0; i < playerCards.Cards.Count; i++)
                 {
-                    if (playerCards.Cards[i].Value == 11 && (sum+11)>21)
+                    if (playerCards.Cards[i].Value == aceValueMax && (sum+ aceValueMax) > scoreMaxValue)
                     {
-                        sum += 1;
+                        sum += aceValueMin;
                     }
                     else
                     {
@@ -264,7 +267,7 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItem.Name = player.Key.Name;
                 playerViewItem.GameNumber = player.Key.GameNumber;
                 playerViewItem.PlayerType = player.Key.PlayerType;
-                playerViewItem.Score = player.Value.Sum(c => c.Value);
+                //playerViewItem.Score = player.Value.Sum(c => c.Value);
                 foreach (var card in player.Value)
                 {
                     playerViewItem.Cards.Add(new CardViewItem { Id = card.Id, Value = card.Value });
@@ -296,7 +299,7 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItem.Name = player.Key.Name;
                 playerViewItem.GameNumber = player.Key.GameNumber;
                 playerViewItem.PlayerType = player.Key.PlayerType;
-                playerViewItem.Score = player.Value.Sum(c => c.Value);
+                //playerViewItem.Score = player.Value.Sum(c => c.Value);
                 foreach (var card in player.Value)
                 {
                     playerViewItem.Cards.Add(new CardViewItem { Id = card.Id, Value = card.Value });
@@ -363,7 +366,7 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItem.Name = player.Key.Name;
                 playerViewItem.GameNumber = player.Key.GameNumber;
                 playerViewItem.PlayerType = player.Key.PlayerType;
-                playerViewItem.Score = player.Value.Sum(c => c.Value);
+                //playerViewItem.Score = player.Value.Sum(c => c.Value);
                 foreach (var card in player.Value)
                 {
                     playerViewItem.Cards.Add(new CardViewItem { Id = card.Id, Value = card.Value });
@@ -404,7 +407,7 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItem.Name = player.Key.Name;
                 playerViewItem.GameNumber = player.Key.GameNumber;
                 playerViewItem.PlayerType = player.Key.PlayerType;
-                playerViewItem.Score = player.Value.Sum(c => c.Value);
+                //playerViewItem.Score = player.Value.Sum(c => c.Value);
                 foreach (var card in player.Value)
                 {
                     playerViewItem.Cards.Add(new CardViewItem { Id = card.Id, Value = card.Value });

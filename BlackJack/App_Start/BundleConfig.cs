@@ -11,7 +11,8 @@ namespace BlackJack
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/app/main.js",
-                "~/Scripts/app/start.js"));
+                "~/Scripts/app/start.js",
+                "~/Scripts/app/play.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
@@ -25,7 +26,8 @@ namespace BlackJack
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/index.css",
-                      "~/Content/start.css"));
+                      "~/Content/start.css",
+                      "~/Content/play.css"));
         }
     }
 }

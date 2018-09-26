@@ -1,6 +1,4 @@
 ﻿function OnConfirm() {
-    $('#more').show();
-    $('#enough').show();
 
     var botCountValue = $('#botCount').val();
     var userNameValue = $('#userName').val();
@@ -23,43 +21,24 @@
         isUserNameExist();
 
         return;
+    } else {
+        var data = { botCount: botCountValue, userName: userNameValue };
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:64520/Game/Start',
+            data: data,
+            success: function (data) {
+                $('#result').replaceWith(data);
+            },
+            complete: function () {
+                $('#more').show();
+                $('#enough').show();
+            }
+        });
     }
 
 
-    var data = { botCount: botCountValue, userName: userNameValue };
-    $.ajax({
-        type: 'POST',
-        url: 'http://localhost:64520/Game/Start',
-        data: data,
-        success: function (data) {
-            $('#result').replaceWith(data);
-
-        }
-    });
-    $('#more').show();
-    $('#enough').show();
+   
 };
 
 
-function OnMore() {
-    $.ajax({
-        type: 'GET',
-        url: 'http://localhost:64520/Game/more',
-        success: function(data) {
-            $('#result').replaceWith(data);
-        }
-    });
-}
-
-
-function OnEnough() {
-    $('#enough').prop('disabled', true);
-    $('#more').prop('disabled', true);
-    $.ajax({
-        type: 'GET',
-        url: 'http://localhost:64520/Game/enough',
-        success: function (data) {
-            $('#result').replaceWith(data);
-        }
-    });
-}
