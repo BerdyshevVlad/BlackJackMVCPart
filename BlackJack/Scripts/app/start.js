@@ -27,12 +27,25 @@
             type: 'POST',
             url: 'http://localhost:64520/Game/Start',
             data: data,
-            success: function (data) {
+            success: function(data) {
                 $('#result').replaceWith(data);
             },
-            complete: function () {
-                $('#more').show();
-                $('#enough').show();
+            complete: function() {
+                var dealerPositionIndex = 0;
+                var maxWinScore = 21;
+                var playersScors = GetPlayersScors();
+                if (playersScors[dealerPositionIndex].score == maxWinScore) {
+                    winners = DefineTheWinners();
+                    jQuery.noConflict();
+                    $('#exampleModal').modal('show');
+                    $('#modal-body').text("Game is over! Winners are: " + winners);
+                    $('#enough').prop('disabled', true);
+                    $('#more').prop('disabled', true);
+                }
+                if (playersScors[dealerPositionIndex].score != maxWinScore) {
+                    $('#more').show();
+                    $('#enough').show();
+                }
             }
         });
     }
@@ -40,5 +53,3 @@
 
    
 };
-
-

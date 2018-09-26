@@ -230,7 +230,7 @@ namespace BlackJack.BusinessLogic.Services
                 int sum = 0;
                 for (int i = 0; i < playerCards.Cards.Count; i++)
                 {
-                    if (playerCards.Cards[i].Value == aceValueMax && (sum+ aceValueMax) > scoreMaxValue)
+                    if (playerCards.Cards[i].Value == aceValueMax && (sum + aceValueMax) > scoreMaxValue)
                     {
                         sum += aceValueMin;
                     }
@@ -267,7 +267,6 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItem.Name = player.Key.Name;
                 playerViewItem.GameNumber = player.Key.GameNumber;
                 playerViewItem.PlayerType = player.Key.PlayerType;
-                //playerViewItem.Score = player.Value.Sum(c => c.Value);
                 foreach (var card in player.Value)
                 {
                     playerViewItem.Cards.Add(new CardViewItem { Id = card.Id, Value = card.Value });
@@ -299,7 +298,6 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItem.Name = player.Key.Name;
                 playerViewItem.GameNumber = player.Key.GameNumber;
                 playerViewItem.PlayerType = player.Key.PlayerType;
-                //playerViewItem.Score = player.Value.Sum(c => c.Value);
                 foreach (var card in player.Value)
                 {
                     playerViewItem.Cards.Add(new CardViewItem { Id = card.Id, Value = card.Value });
@@ -316,11 +314,12 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task TakeCardIfNotEnough(bool takeCard)
         {
+            int scoreCountToStop = 17;
             List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
 
             foreach (var playerView in playerViewItemList)
             {
-                if (playerView.Score < 17 && playerView.PlayerType != _personPlayerType)
+                if (playerView.Score < scoreCountToStop && playerView.PlayerType != _personPlayerType)
                 {
                     Player player = await _playerRepository.GetByIdAsync(playerView.Id);
                     Card card = await DrawCard();
@@ -337,9 +336,6 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        /////////////////////////////////////////////////////////
-        ///
-
         public async Task<MoreGameView> More()
         {
             bool takeCard = false;
@@ -352,7 +348,10 @@ namespace BlackJack.BusinessLogic.Services
             var isUserBusted = await IsUserBusted();
             if (isUserBusted)
             {
-                await Enough();
+               EnoughGameView tmp= await Enough();
+                MoreGameView moreModel = new MoreGameView();
+                moreModel.Players = tmp.Players;
+                return moreModel;
             }
 
             Dictionary<Player, List<Card>> playerCardsLastGame = await DefinePlayersFromLastGame();
@@ -366,10 +365,20 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItem.Name = player.Key.Name;
                 playerViewItem.GameNumber = player.Key.GameNumber;
                 playerViewItem.PlayerType = player.Key.PlayerType;
-                //playerViewItem.Score = player.Value.Sum(c => c.Value);
+
+                int cardCountForDealerMax = 2;
+                int cardCountForDealerCurrent = 0;
                 foreach (var card in player.Value)
                 {
-                    playerViewItem.Cards.Add(new CardViewItem { Id = card.Id, Value = card.Value });
+                    if (player.Key.PlayerType == _dealerPlayerType && cardCountForDealerCurrent < cardCountForDealerMax)
+                    {
+                        playerViewItem.Cards.Add(new CardViewItem { Id = card.Id, Value = card.Value });
+                        cardCountForDealerCurrent++;
+                    }
+                    if (player.Key.PlayerType != _dealerPlayerType)
+                    {
+                        playerViewItem.Cards.Add(new CardViewItem { Id = card.Id, Value = card.Value });
+                    }
                 }
 
                 playerViewItemList.Add(playerViewItem);
@@ -377,10 +386,10 @@ namespace BlackJack.BusinessLogic.Services
 
             CountSum(ref playerViewItemList);
 
-            MoreGameView moreOrEnoughViewModel = new MoreGameView();
-            moreOrEnoughViewModel.Players = playerViewItemList;
+            MoreGameView moreViewModel = new MoreGameView();
+            moreViewModel.Players = playerViewItemList;
 
-            return moreOrEnoughViewModel;
+            return moreViewModel;
         }
 
 
@@ -407,7 +416,6 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItem.Name = player.Key.Name;
                 playerViewItem.GameNumber = player.Key.GameNumber;
                 playerViewItem.PlayerType = player.Key.PlayerType;
-                //playerViewItem.Score = player.Value.Sum(c => c.Value);
                 foreach (var card in player.Value)
                 {
                     playerViewItem.Cards.Add(new CardViewItem { Id = card.Id, Value = card.Value });
@@ -424,13 +432,11 @@ namespace BlackJack.BusinessLogic.Services
             return moreOrEnoughViewModel;
         }
 
-        ///
-        /////////////////////////////////////////////////////////////
-
-
 
         public async Task<bool> IsGameEnded(bool takeCard)
         {
+            int scoreCountToStop = 17;
+            int maxWinScor = 21;
             List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
             var cardCount = new List<int>();
 
@@ -440,11 +446,11 @@ namespace BlackJack.BusinessLogic.Services
                 cardCount.Add(scoreValue);
             }
 
-            var isGameEnded = cardCount.TrueForAll(c => c >= 17);
+            var isGameEnded = cardCount.TrueForAll(c => c >= scoreCountToStop);
             PlayerGameViewItem playerViewItem =
                 playerViewItemList.SingleOrDefault(x => x.PlayerType == _personPlayerType);
             int cardSumPlayerPerson = playerViewItem.Cards.Sum(c => c.Value);
-            if (cardSumPlayerPerson < 21 && !takeCard)
+            if (cardSumPlayerPerson < maxWinScor && !takeCard)
             {
                 isGameEnded = false;
             }
@@ -458,12 +464,14 @@ namespace BlackJack.BusinessLogic.Services
             int scoreMaxValue = 21;
 
             List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
-            PlayerGameViewItem playerViewItem =
-                playerViewItemList.SingleOrDefault(x => x.PlayerType == _personPlayerType);
-            int cardSum = playerViewItem.Cards.Sum(x => x.Value);
-            if (cardSum >= scoreMaxValue)
+            CountSum(ref playerViewItemList);
+            PlayerGameViewItem playerViewItem = playerViewItemList.SingleOrDefault(x => x.PlayerType == _personPlayerType);
+
+            int score = playerViewItem.Score;
+            if (score >= scoreMaxValue)
             {
                 return true;
+
             }
 
             return false;
@@ -472,8 +480,9 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<List<PlayerGameViewItem>> DefineTheWinner()
         {
+            int maxWinScor = 21;
             List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
-            var max = playerViewItemList.Where(x => x.Score <= 21).Max(x => x.Score);
+            var max = playerViewItemList.Where(x => x.Score <= maxWinScor).Max(x => x.Score);
 
 
             List<PlayerGameViewItem> winners = playerViewItemList.Where(x => x.Score == max).ToList();
@@ -486,9 +495,7 @@ namespace BlackJack.BusinessLogic.Services
         {
             IEnumerable<PlayerCard> gamePlayersList = _playerCardRepository.GetAll();
             int maxRound = gamePlayersList.Max(r => r.CurrentRound);
-
             var history = new HistoryGameView();
-
             var tmpPlayerItemList = new List<PlayerGameViewItem>();
 
             for (int i = 1; i <= maxRound; i++)
@@ -515,15 +522,14 @@ namespace BlackJack.BusinessLogic.Services
                         });
                     }
 
-                    tmpPlayerItemList.Add(playerModel);                 
+                    tmpPlayerItemList.Add(playerModel);
                 }
             }
 
             CountSum(ref tmpPlayerItemList);
-            history.Players= tmpPlayerItemList;
+            history.Players = tmpPlayerItemList;
 
             return history;
         }
-
     }
 }
