@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   }
 
   public getHistory() {
-    this.http.get<HistoryGameView>({ environment }.environment.baseUrl + "/history")
+    this.http.get<HistoryGameView>("http://localhost:50610/api/game/history", {responseType: "json"})
       .subscribe(result => {
         console.log(result);
         this.history = result;
