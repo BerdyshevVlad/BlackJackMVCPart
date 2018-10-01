@@ -10,6 +10,6 @@ namespace BlackJack.DataAccess.Interfaces
     public interface IPlayerCardRepository
     {
         Task AddCardAsync(Player player, Card card, int currentRound);
-        IEnumerable<PlayerCard> GetAll();
+        List<PlayerCard> GetAll();
     }
 }

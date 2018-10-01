@@ -12,7 +12,7 @@ namespace BlackJack.Controllers
 {
     public class GameController : Controller
     {
-        private const string BASE_URL = "http://localhost:50610/";
+        private const string BASE_URL = "http://localhost:50610/api/game";
 
 
         [ExceptionLogger]
@@ -40,7 +40,7 @@ namespace BlackJack.Controllers
                 string json = JsonConvert.SerializeObject(userNameAndBotCount);
                 HttpContent content = new StringContent(json);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                HttpResponseMessage response = await http.PostAsync(BASE_URL + "api/game/start", content);
+                HttpResponseMessage response = await http.PostAsync(BASE_URL + "/start", content);
 
                 StartGameView model = response.Content.ReadAsAsync<StartGameView>().Result;
 
@@ -55,7 +55,7 @@ namespace BlackJack.Controllers
         {
             using (var http = new HttpClient())
             {
-                HttpResponseMessage response = await http.GetAsync(BASE_URL + "api/game/more");
+                HttpResponseMessage response = await http.GetAsync(BASE_URL + "/more");
                 MoreGameView model = response.Content.ReadAsAsync<MoreGameView>().Result;
 
                 return PartialView("_Play", model.Players);
@@ -69,7 +69,7 @@ namespace BlackJack.Controllers
         {
             using (var http = new HttpClient())
             {
-                HttpResponseMessage response = await http.GetAsync(BASE_URL + "api/game/enough");
+                HttpResponseMessage response = await http.GetAsync(BASE_URL + "/enough");
                 EnoughGameView model = response.Content.ReadAsAsync<EnoughGameView>().Result;
 
                 return PartialView("_Play", model.Players);
@@ -83,7 +83,7 @@ namespace BlackJack.Controllers
         {
             using (var http = new HttpClient())
             {
-                HttpResponseMessage response = await http.GetAsync(BASE_URL + "api/game/history");
+                HttpResponseMessage response = await http.GetAsync(BASE_URL + "/history");
                 HistoryGameView model = response.Content.ReadAsAsync<HistoryGameView>().Result;
 
                 return View("History", "", JsonConvert.SerializeObject(model.Players));

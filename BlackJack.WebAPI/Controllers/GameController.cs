@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 
 namespace BlackJack.WebApi.Controllers
 {
+
     [RoutePrefix("api/game")]
     public class GameController : ApiController
     {
@@ -59,7 +60,8 @@ namespace BlackJack.WebApi.Controllers
 
         [HttpGet]
         [Route("history")]
-        [ResponseType(typeof(HistoryGameView))]
+        //[AllowAnonymous]
+        //[AcceptVerbs("GET", "POST")]
         public async Task<HistoryGameView> History()
         {
             HistoryGameView model = await _gameService.GetHistory();

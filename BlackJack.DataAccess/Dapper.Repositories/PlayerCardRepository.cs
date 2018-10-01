@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 using BlackJack.DataAccess.Interfaces;
 using BlackJack.Entities;
@@ -9,7 +10,7 @@ using Dapper.Contrib.Extensions;
 
 namespace BlackJack.DataAccess.Dapper.Repositories
 {
-    public class PlayerCardRepository :BaseRepository<PlayerCard>, IPlayerCardRepository
+    public class PlayerCardRepository : BaseRepository<PlayerCard>, IPlayerCardRepository
     {
         public PlayerCardRepository(string connectionString) : base(connectionString)
         {
@@ -32,13 +33,13 @@ namespace BlackJack.DataAccess.Dapper.Repositories
             }
         }
 
-        public IEnumerable<PlayerCard> GetAll()
+        public List<PlayerCard> GetAll()
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
                 try
                 {
-                    IEnumerable<PlayerCard> playerCardsList =db.GetAll<PlayerCard>();
+                    var playerCardsList = db.GetAll<PlayerCard>().ToList();
                     return playerCardsList;
                 }
                 catch (Exception ex)

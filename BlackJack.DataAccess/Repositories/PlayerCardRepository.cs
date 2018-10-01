@@ -34,9 +34,9 @@ namespace BlackJack.DataAccess.Repositories
         }
 
 
-        public IEnumerable<PlayerCard> GetAll()
+        public List<PlayerCard> GetAll()
         {
-            List<PlayerCard> playerCardsList = _db.PlayersCards.ToList();
+            List<PlayerCard> playerCardsList =  _db.PlayersCards.ToList();
             return playerCardsList;
         }
     }

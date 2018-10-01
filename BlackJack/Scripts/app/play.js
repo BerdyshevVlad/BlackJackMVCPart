@@ -1,4 +1,52 @@
-﻿
+﻿function GetPlayersScors() {
+    var arr = [];
+    $("#table tr td").each(function () {
+        arr.push(this.id);
+    });
+
+    var playerScoreList = [];
+
+    for (var i = 0; i < arr.length; i += 2) {
+
+        var playerName = $('#' + arr[i]).text().replace(/ /g, '');
+        var playerScore = $('#' + arr[i + 1]).text().replace(/ /g, '');
+        playerScoreList.push({ name: playerName, score: playerScore });
+    }
+
+    return playerScoreList;
+}
+
+
+function DefineTheWinners() {
+
+    var maxWinScore = 21;
+    var playerScoreList = GetPlayersScors();
+    var players = [];
+    for (var k = 0; k < playerScoreList.length; k++) {
+        if (playerScoreList[k].score <= maxWinScore) {
+            players.push(playerScoreList[k]);
+        }
+    }
+
+    var maxScore = Math.max.apply(Math, players.map(function (o) { return o.score; }));
+
+    var winners = [];
+    for (var i = 0; i < players.length; i++) {
+        if (players[i].score == maxScore) {
+            winners.push(players[i]);
+        }
+    }
+
+    var winnerStr = "";
+    for (var j = 0; j < winners.length; j++) {
+        winnerStr += winners[j].name + " ";
+    }
+
+    winnerStr += " have score " + maxScore;
+
+    return winnerStr;
+}
+
 function OnConfirm() {
 
     var maxBotCount = 5;
@@ -101,51 +149,4 @@ function OnEnough() {
     });
 }
 
-function GetPlayersScors() {
-    var arr = [];
-    $("#table tr td").each(function () {
-        arr.push(this.id);
-    });
 
-    var playerScoreList = [];
-   
-    for (var i = 0; i < arr.length; i += 2) {
-
-        var playerName = $('#' + arr[i]).text().replace(/ /g, '');
-        var playerScore = $('#' + arr[i + 1]).text().replace(/ /g, '');
-        playerScoreList.push({ name: playerName, score: playerScore });
-    }
-
-    return playerScoreList;
-}
-
-
-function DefineTheWinners() {
-
-    var maxWinScore = 21;
-    var playerScoreList = GetPlayersScors();
-    var players = [];
-    for (var k = 0; k < playerScoreList.length; k++) {
-        if (playerScoreList[k].score <= maxWinScore) {
-            players.push(playerScoreList[k]);
-        }
-    }
-
-    var maxScore = Math.max.apply(Math, players.map(function (o) { return o.score; }));
-
-    var winners = [];
-    for (var i = 0; i < players.length; i++) {
-        if (players[i].score == maxScore) {
-            winners.push(players[i]);
-        }
-    }
-
-    var winnerStr="";
-    for (var j = 0; j < winners.length; j++) {
-        winnerStr += winners[j].name+" ";
-    }
-
-    winnerStr += " have score " + maxScore;
-
-    return winnerStr;
-}

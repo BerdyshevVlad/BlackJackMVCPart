@@ -56,7 +56,7 @@ namespace BlackJack.BusinessLogic.Services
             int _currentRound = 0;
             try
             {
-                IEnumerable<PlayerCard> gamePlayersList = _playerCardRepository.GetAll();
+                List<PlayerCard> gamePlayersList = _playerCardRepository.GetAll();
                 int maxRound = gamePlayersList.Max(x => x.CurrentRound);
                 if (maxRound > 0)
                 {
@@ -142,13 +142,27 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<Dictionary<Player, List<Card>>> DefinePlayersFromLastGame()
         {
-            Dictionary<Player, List<Card>> playerCardsDictionary =
-                await _playerRepository.GetAllCardsFromAllPlayers(_round);
+            List<PlayerCard> playerCards = _playerCardRepository.GetAll();
+            int max = playerCards.Max(x => x.Player.GameNumber);
+            var playersLastGame = playerCards.Where(p => p.Player.GameNumber == _round).ToList();
+            Dictionary<Player, List<Card>> playerCardsDictionary =new Dictionary<Player, List<Card>>();
 
-            int max = playerCardsDictionary.Max(x => x.Key.GameNumber);
-            var playersLastGame = playerCardsDictionary.Where(x => x.Key.GameNumber == max)
-                .ToDictionary(x => x.Key, x => x.Value);
-            return playersLastGame;
+
+            var count = playersLastGame.Where(x => x.CurrentRound == max)
+                .GroupBy(x => x.PlayerId).Select(g => g.Key).Count();
+
+            for (int j = 0; j < count; j++)
+            {
+                var player = playersLastGame.Where(x => x.Player.GameNumber == max)
+                    .GroupBy(x => x.PlayerId).ToList();
+
+                var cardList = player[j].Select(x=>x.Card).ToList();
+                var playerTmp = player[j].Select(x => x.Player).FirstOrDefault();
+
+                playerCardsDictionary.Add(playerTmp, cardList);
+            }
+            
+            return playerCardsDictionary;
         }
 
 
@@ -245,9 +259,9 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task<StartGameView> Start(SetNameAndBotCount usSetNameAndBotCount)
+        public async Task<StartGameView> Start(SetNameAndBotCount SetNameAndBotCount)
         {
-            await SetBotCount(usSetNameAndBotCount.BotCount, usSetNameAndBotCount.UserName);
+            await SetBotCount(SetNameAndBotCount.BotCount, SetNameAndBotCount.UserName);
 
             int handOverCount = 2;
             _round++;
@@ -291,8 +305,7 @@ namespace BlackJack.BusinessLogic.Services
             var playerViewItemList = new List<PlayerGameViewItem>();
             foreach (var player in playerCardsLastGame)
             {
-                IEnumerable<Card> cardsList = await _playerRepository.GetAllCardsFromPlayer(player.Key.Id, _round);
-                int score = cardsList.ToList().Sum(card => card.Value);
+                //IEnumerable<Card> cardsList = await _playerRepository.GetAllCardsFromPlayer(player.Key.Id, _round);
                 PlayerGameViewItem playerViewItem = new PlayerGameViewItem();
                 playerViewItem.Id = player.Key.Id;
                 playerViewItem.Name = player.Key.Name;
@@ -348,7 +361,7 @@ namespace BlackJack.BusinessLogic.Services
             var isUserBusted = await IsUserBusted();
             if (isUserBusted)
             {
-               EnoughGameView tmp= await Enough();
+                EnoughGameView tmp = await Enough();
                 MoreGameView moreModel = new MoreGameView();
                 moreModel.Players = tmp.Players;
                 return moreModel;
@@ -485,7 +498,7 @@ namespace BlackJack.BusinessLogic.Services
             var max = playerViewItemList.Where(x => x.Score <= maxWinScor).Max(x => x.Score);
 
 
-            List<PlayerGameViewItem> winners = playerViewItemList.Where(x => x.Score == max).ToList();
+            var winners = playerViewItemList.Where(x => x.Score == max).ToList();
 
             return winners;
         }
@@ -493,36 +506,44 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<HistoryGameView> GetHistory()
         {
-            IEnumerable<PlayerCard> gamePlayersList = _playerCardRepository.GetAll();
-            int maxRound = gamePlayersList.Max(r => r.CurrentRound);
+            List<PlayerCard> playersList = _playerCardRepository.GetAll();
+            int maxRound = playersList.Max(r => r.CurrentRound);
             var history = new HistoryGameView();
             var tmpPlayerItemList = new List<PlayerGameViewItem>();
 
             for (int i = 1; i <= maxRound; i++)
             {
-                List<PlayerCard> playersList = await _playerRepository.GetPlayersByRound(i);
-                foreach (var item in playersList)
+
+                var count = playersList.Where(x => x.CurrentRound == i)
+                    .GroupBy(x => x.PlayerId).Select(g => g.Key).Count();
+
+                for (int j = 1; j < count; j++)
                 {
-                    IEnumerable<Card> cardList = await _playerRepository.GetAllCardsFromPlayer(item.PlayerId, i);
-                    Player player = await _playerRepository.GetByIdAsync(item.PlayerId);
+                    var player = playersList.Where(x => x.CurrentRound == i)
+                         .GroupBy(x => x.PlayerId).Where(g => g.Key == j).SelectMany(x => x).ToList();
 
                     PlayerGameViewItem playerModel = new PlayerGameViewItem();
-                    playerModel.Id = player.Id;
-                    playerModel.Name = player.Name;
-                    playerModel.GameNumber = player.GameNumber;
-                    playerModel.PlayerType = player.PlayerType;
-                    playerModel.Score = cardList.Sum(x => x.Value);
-                    playerModel.Round = i;
-                    foreach (var card in cardList)
+                    for (int k = 0; k < player.Count; k++)
                     {
                         playerModel.Cards.Add(new CardViewItem
                         {
-                            Id = card.Id,
-                            Value = card.Value
+                            Id = player[k].Card.Id,
+                            Value = player[k].Card.Value
                         });
-                    }
 
+                        if (k == player.Count - 1)
+                        {
+
+                            playerModel.Id = player[k].Player.Id;
+                            playerModel.Name = player[k].Player.Name;
+                            playerModel.GameNumber = player[k].Player.GameNumber;
+                            playerModel.PlayerType = player[k].Player.PlayerType;
+                            playerModel.Round = i;
+                            playerModel.Score = playerModel.Cards.Sum(x => x.Value);
+                        }
+                    }
                     tmpPlayerItemList.Add(playerModel);
+
                 }
             }
 
