@@ -11,6 +11,7 @@ namespace BlackJack.DataAccess.Repositories
     {
         public PlayerRepository(BlackJackContext context):base(context)
         {
+
         }
     }
 }
