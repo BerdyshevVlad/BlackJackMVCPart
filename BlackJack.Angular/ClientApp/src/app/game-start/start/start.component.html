@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="input-group mb-3 col-6 col-centered">
+    <input [(ngModel)]="botCount" type="number" max="5" min="1" class="form-control" id="inputFieldBotCount" placeholder="Enter number of bots from 1 to 5" aria-label="Enter number of bots" aria-describedby="basic-addon2">
+  </div>
+  <div class="input-group mb-3 col-6 col-centered">
+    <input [(ngModel)]="userName" type="text" class="form-control" id="inputFieldUserName" placeholder="Enter your name" aria-label="Enter  your name" aria-describedby="basic-addon2">
+  </div>
+  <div class="input-group mb-3 col-2 col-centered">
+    <button class="btn btn-success" (click)="start()"><i class="fas fa-robot"></i>&nbsp;Confirm!&nbsp;<i class="fas fa-robot"></i></button>
+  </div>
+</div>

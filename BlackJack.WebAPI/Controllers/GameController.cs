@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.Script.Services;
+using System.Web.Services;
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.ViewModels;
 using ExceptionLoggers;
@@ -25,6 +27,7 @@ namespace BlackJack.WebApi.Controllers
 
 
         [HttpPost]
+        [Route("start")]
         public async Task<StartGameView> Start([FromBody] SetNameAndBotCount json)
         {
 

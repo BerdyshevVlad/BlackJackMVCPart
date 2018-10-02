@@ -513,37 +513,34 @@ namespace BlackJack.BusinessLogic.Services
 
             for (int i = 1; i <= maxRound; i++)
             {
-
                 var count = playersList.Where(x => x.CurrentRound == i)
                     .GroupBy(x => x.PlayerId).Select(g => g.Key).Count();
 
-                for (int j = 1; j < count; j++)
+                for (int j = 0; j < count; j++)
                 {
-                    var player = playersList.Where(x => x.CurrentRound == i)
-                         .GroupBy(x => x.PlayerId).Where(g => g.Key == j).SelectMany(x => x).ToList();
+                    var player = playersList.Where(x => x.Player.GameNumber == i)
+                        .GroupBy(x => x.PlayerId).ToList();
+
+                    var cardList = player[j].Select(x => x.Card).ToList();
+                    var playerTmp = player[j].Select(x => x.Player).FirstOrDefault();
 
                     PlayerGameViewItem playerModel = new PlayerGameViewItem();
-                    for (int k = 0; k < player.Count; k++)
+                    playerModel.Id = playerTmp.Id;
+                    playerModel.Name = playerTmp.Name;
+                    playerModel.GameNumber = playerTmp.GameNumber;
+                    playerModel.PlayerType = playerTmp.PlayerType;
+                    playerModel.Round = i;
+                    for (int k = 0; k < cardList.Count; k++)
                     {
+
                         playerModel.Cards.Add(new CardViewItem
                         {
-                            Id = player[k].Card.Id,
-                            Value = player[k].Card.Value
+                            Id = cardList[k].Id,
+                            Value = cardList[k].Value
                         });
-
-                        if (k == player.Count - 1)
-                        {
-
-                            playerModel.Id = player[k].Player.Id;
-                            playerModel.Name = player[k].Player.Name;
-                            playerModel.GameNumber = player[k].Player.GameNumber;
-                            playerModel.PlayerType = player[k].Player.PlayerType;
-                            playerModel.Round = i;
-                            playerModel.Score = playerModel.Cards.Sum(x => x.Value);
-                        }
                     }
+                    playerModel.Score = playerModel.Cards.Sum(x => x.Value);
                     tmpPlayerItemList.Add(playerModel);
-
                 }
             }
 

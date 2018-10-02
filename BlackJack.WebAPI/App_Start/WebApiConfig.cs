@@ -12,6 +12,10 @@ namespace BlackJack.WebApi
         {
             // Web API configuration and services
             AutofacConfig.Initialize(config);
+
+            //var cors = new EnableCorsAttribute("*", "*", "*");
+            //config.EnableCors(cors);
+
             // Web API routes
             config.MapHttpAttributeRoutes();
 

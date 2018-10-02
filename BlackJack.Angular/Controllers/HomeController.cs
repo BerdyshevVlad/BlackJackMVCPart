@@ -12,7 +12,6 @@ namespace BlackJack.Angular.Controllers
         public ActionResult Index()
         {
             return new FilePathResult("~/ClientApp/dist/ClientApp/index.html", "text/html");
-            //return View();
         }
     }
 }
