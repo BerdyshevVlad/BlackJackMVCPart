@@ -45,7 +45,7 @@ export class StartComponent {
       UserName:this.userName,
       BotCount:this.botCount
     }
-
+     
     this.http.postStart(this.userNameAndBotCount).subscribe(result => {
       this.startView = result;
       this.playerList = this.startView.Players;
