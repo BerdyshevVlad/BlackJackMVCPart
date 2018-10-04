@@ -1,4 +1,18 @@
-<div *ngIf="historyView!=null">
-  <div *ngFor="let item of historyView.Players">{{item.Name}}</div>
-</div>
-
+<kendo-grid [data]="gridView" [height]="760" [pageSize]="pageSize"
+            [skip]="skip"
+            [pageable]="true"
+            (pageChange)="pageChange($event)">
+  <kendo-grid-column field="Name" title="Name" [width]="300">
+  </kendo-grid-column>
+  <kendo-grid-column field="cards" title="Cards" width="120">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <ul>
+        <li *ngFor="let card of dataItem.Cards">{{card.Value}}</li>
+      </ul>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="Score" title="Total" [width]="300">
+  </kendo-grid-column>
+  <kendo-grid-column field="Round" title="Round" [width]="300">
+  </kendo-grid-column>
+</kendo-grid>

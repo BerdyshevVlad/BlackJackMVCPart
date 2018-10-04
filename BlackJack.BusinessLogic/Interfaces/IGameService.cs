@@ -7,7 +7,6 @@ namespace BlackJack.BusinessLogic.Interfaces
 {
     public interface IGameService
     {
-        Task<int> DefineCurrentGame();
         int DefineCurrentRound();
         Task InitializePlayers(int game,string userName);
         Task<GetDeckGameView> GetDeck();

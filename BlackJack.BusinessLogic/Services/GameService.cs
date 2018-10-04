@@ -30,27 +30,6 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task<int> DefineCurrentGame()
-        {
-            int currentRound = 0;
-            try
-            {
-                var gamePlayersList = await _playerRepository.GetAllAsync();
-                int maxGame = gamePlayersList.Max(x => x.GameNumber);
-                if (maxGame > 0)
-                {
-                    currentRound = maxGame + 1;
-                }
-            }
-            catch
-            {
-                currentRound = 1;
-            }
-
-            return currentRound;
-        }
-
-
         public int DefineCurrentRound()
         {
             int _currentRound = 0;
@@ -122,7 +101,6 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task SetBotCount(int botsCount, string userName)
         {
-            //int gameNumber = await DefineCurrentGame();
             int currentGame = _round + 1;
             int gameNumber = currentGame;
             await InitializePlayers(gameNumber, userName);
@@ -307,7 +285,6 @@ namespace BlackJack.BusinessLogic.Services
             var playerViewItemList = new List<PlayerGameViewItem>();
             foreach (var player in playerCardsLastGame)
             {
-                //IEnumerable<Card> cardsList = await _playerRepository.GetAllCardsFromPlayer(player.Key.Id, _round);
                 PlayerGameViewItem playerViewItem = new PlayerGameViewItem();
                 playerViewItem.Id = player.Key.Id;
                 playerViewItem.Name = player.Key.Name;
@@ -447,7 +424,6 @@ namespace BlackJack.BusinessLogic.Services
             List<PlayerGameViewItem> winners = await GetWinners(playerViewItemList);
 
             EnoughGameView enoughViewModel = new EnoughGameView();
-            //enoughViewModel.Players = playerViewItemList;
             enoughViewModel.Players = winners;
 
             return enoughViewModel;
@@ -459,17 +435,8 @@ namespace BlackJack.BusinessLogic.Services
             int scoreCountToStop = 17;
             int maxWinScor = 21;
             List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
-            //var cardCount = new List<int>();
-
-            //foreach (var playerScore in playerViewItemList.Where(x => x.PlayerType != _personPlayerType))
-            //{
-            //    int scoreValue = playerScore.Score;
-            //    cardCount.Add(scoreValue);
-            //}
-
             var isGameEnded = playerViewItemList.TrueForAll(c => c.Score >= scoreCountToStop);
             PlayerGameViewItem playerViewItem = playerViewItemList.SingleOrDefault(x => x.PlayerType == _personPlayerType);
-            //int cardSumPlayerPerson = playerViewItem.Cards.Sum(c => c.Value);
             if (playerViewItem.Score < maxWinScor && !takeCard)
             {
                 isGameEnded = false;
@@ -482,9 +449,7 @@ namespace BlackJack.BusinessLogic.Services
         public async Task<bool> IsUserBusted()
         {
             int scoreMaxValue = 21;
-
             List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
-            //CountSum(ref playerViewItemList);
             PlayerGameViewItem playerViewItem = playerViewItemList.SingleOrDefault(x => x.PlayerType == _personPlayerType);
 
             int score = playerViewItem.Score;
@@ -501,15 +466,6 @@ namespace BlackJack.BusinessLogic.Services
         public async Task<List<PlayerGameViewItem>> GetWinners(List<PlayerGameViewItem> playerViewItemList)
         {
             int maxWinScore = 21;
-            //List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
-            //var max = playerViewItemList.Where(x => x.Score <= maxWinScore).Max(x => x.Score);
-
-
-            //var winners = playerViewItemList.Where(x => x.Score == max).ToList();
-
-            //WinnersGameView winnersView=new WinnersGameView();
-            //winnersView.Players = winners;
-
             var players = playerViewItemList.Where(x => x.Score <= maxWinScore).ToList();
             int max = players.Max(x => x.Score);
             foreach (var item in playerViewItemList)

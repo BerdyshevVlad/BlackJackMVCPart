@@ -5,6 +5,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from "./app-routing.module";
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { InputsModule } from '@progress/kendo-angular-inputs';
+import { GridModule } from '@progress/kendo-angular-grid';
+import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+
+
 
 
 @NgModule({
@@ -17,7 +22,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
-    BrowserAnimationsModule    
+    BrowserAnimationsModule,
+    GridModule,
+    DropDownsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
