@@ -26,7 +26,7 @@ namespace BlackJack.DataAccess.Context.MVC
     {
         protected override void Seed(BlackJackContext context)
         {
-            var cardsList = new List<Card>();
+            //var cardsList = new List<Card>();
             Card card = null;
             Array enumValuesList = Enum.GetValues(typeof(Rank));
 
@@ -73,9 +73,8 @@ namespace BlackJack.DataAccess.Context.MVC
                         context.Cards.Add(card);
                     }
                 }
+                context.SaveChanges();
             }
-
-
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);

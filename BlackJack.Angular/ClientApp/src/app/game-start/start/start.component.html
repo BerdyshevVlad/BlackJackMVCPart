@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="startInputGroup">
   <div class="input-group mb-3 col-6 col-centered">
     <input [(ngModel)]="botCount" type="number" max="5" min="1" class="form-control" id="inputFieldBotCount" placeholder="Enter number of bots from 1 to 5" aria-label="Enter number of bots" aria-describedby="basic-addon2">
   </div>
@@ -6,6 +6,69 @@
     <input [(ngModel)]="userName" type="text" class="form-control" id="inputFieldUserName" placeholder="Enter your name" aria-label="Enter  your name" aria-describedby="basic-addon2">
   </div>
   <div class="input-group mb-3 col-2 col-centered">
+    <p id="wrongData"></p>
+  </div>
+  <div class="input-group mb-3 col-2 col-centered">
     <button class="btn btn-success" (click)="start()"><i class="fas fa-robot"></i>&nbsp;Confirm!&nbsp;<i class="fas fa-robot"></i></button>
   </div>
 </div>
+
+
+<div class="container" id="gamePlay" *ngIf="gameIsRunning==true">
+  <div class="row">
+    <div class="col-12">
+      <div class="text-center">
+        <ul>
+          <li *ngFor="let player of  playerList">
+            {{player.Name}}
+            <span *ngFor="let card of player.Cards">{{card.Value}},</span>
+          </li>
+        </ul>
+        <br />
+        <h2>TOTAL SCORE</h2>
+        <ul>
+          <li *ngFor="let player of playerList">
+            {{player.Name}}
+            <span>{{player.Score}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" id="gamePlay" *ngIf="gameIsRunning==true">
+  <div class="row">
+    <div class="col-12">
+      <div class="text-center">
+        <button type="button" class="btn btn-success moreBtn col-centered" [disabled]="moreButtonDisabled" (click)="more()">MORE</button>
+        <button type="button" class="btn btn-success stayBtn col-centered" [disabled]="stayButtonDisabled" (click)="enough()">ENOUGH</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalContent">
+        <ul>
+          This game was won by:
+          <li *ngFor="let winner of winnerList">{{winner.Name}}</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"  routerLink="/history">View history</button>
+      </div>
+    </div>
+  </div>
+</div>
+

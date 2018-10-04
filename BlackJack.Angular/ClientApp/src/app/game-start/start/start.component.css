@@ -2,3 +2,22 @@
   float: none;
   margin: auto;
 }
+
+
+li {
+  list-style-type: none;
+}
+
+
+.newGame:hover, .newRound:hover {
+  background-color: #4CAF50;
+}
+
+.moreBtn, .stayBtn {
+  margin: 60px;
+}
+
+
+.newRoundBtn, .newGameBtn {
+  margin: 10px;
+}

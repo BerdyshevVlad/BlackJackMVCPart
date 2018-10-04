@@ -122,7 +122,9 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task SetBotCount(int botsCount, string userName)
         {
-            int gameNumber = await DefineCurrentGame();
+            //int gameNumber = await DefineCurrentGame();
+            int currentGame = _round + 1;
+            int gameNumber = currentGame;
             await InitializePlayers(gameNumber, userName);
             try
             {
@@ -145,7 +147,7 @@ namespace BlackJack.BusinessLogic.Services
             List<PlayerCard> playerCards = _playerCardRepository.GetAll();
             int max = playerCards.Max(x => x.Player.GameNumber);
             var playersLastGame = playerCards.Where(p => p.Player.GameNumber == _round).ToList();
-            Dictionary<Player, List<Card>> playerCardsDictionary =new Dictionary<Player, List<Card>>();
+            Dictionary<Player, List<Card>> playerCardsDictionary = new Dictionary<Player, List<Card>>();
 
 
             var count = playersLastGame.Where(x => x.CurrentRound == max)
@@ -156,12 +158,12 @@ namespace BlackJack.BusinessLogic.Services
                 var player = playersLastGame.Where(x => x.Player.GameNumber == max)
                     .GroupBy(x => x.PlayerId).ToList();
 
-                var cardList = player[j].Select(x=>x.Card).ToList();
+                var cardList = player[j].Select(x => x.Card).ToList();
                 var playerTmp = player[j].Select(x => x.Player).FirstOrDefault();
 
                 playerCardsDictionary.Add(playerTmp, cardList);
             }
-            
+
             return playerCardsDictionary;
         }
 
@@ -378,6 +380,7 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItem.Name = player.Key.Name;
                 playerViewItem.GameNumber = player.Key.GameNumber;
                 playerViewItem.PlayerType = player.Key.PlayerType;
+                playerViewItem.Win = false;
 
                 int cardCountForDealerMax = 2;
                 int cardCountForDealerCurrent = 0;
@@ -429,6 +432,7 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItem.Name = player.Key.Name;
                 playerViewItem.GameNumber = player.Key.GameNumber;
                 playerViewItem.PlayerType = player.Key.PlayerType;
+
                 foreach (var card in player.Value)
                 {
                     playerViewItem.Cards.Add(new CardViewItem { Id = card.Id, Value = card.Value });
@@ -437,12 +441,16 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItemList.Add(playerViewItem);
             }
 
+
+
             CountSum(ref playerViewItemList);
+            List<PlayerGameViewItem> winners = await GetWinners(playerViewItemList);
 
-            EnoughGameView moreOrEnoughViewModel = new EnoughGameView();
-            moreOrEnoughViewModel.Players = playerViewItemList;
+            EnoughGameView enoughViewModel = new EnoughGameView();
+            //enoughViewModel.Players = playerViewItemList;
+            enoughViewModel.Players = winners;
 
-            return moreOrEnoughViewModel;
+            return enoughViewModel;
         }
 
 
@@ -451,19 +459,18 @@ namespace BlackJack.BusinessLogic.Services
             int scoreCountToStop = 17;
             int maxWinScor = 21;
             List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
-            var cardCount = new List<int>();
+            //var cardCount = new List<int>();
 
-            foreach (var playerScore in playerViewItemList.Where(x => x.PlayerType != _personPlayerType))
-            {
-                int scoreValue = playerScore.Score;
-                cardCount.Add(scoreValue);
-            }
+            //foreach (var playerScore in playerViewItemList.Where(x => x.PlayerType != _personPlayerType))
+            //{
+            //    int scoreValue = playerScore.Score;
+            //    cardCount.Add(scoreValue);
+            //}
 
-            var isGameEnded = cardCount.TrueForAll(c => c >= scoreCountToStop);
-            PlayerGameViewItem playerViewItem =
-                playerViewItemList.SingleOrDefault(x => x.PlayerType == _personPlayerType);
-            int cardSumPlayerPerson = playerViewItem.Cards.Sum(c => c.Value);
-            if (cardSumPlayerPerson < maxWinScor && !takeCard)
+            var isGameEnded = playerViewItemList.TrueForAll(c => c.Score >= scoreCountToStop);
+            PlayerGameViewItem playerViewItem = playerViewItemList.SingleOrDefault(x => x.PlayerType == _personPlayerType);
+            //int cardSumPlayerPerson = playerViewItem.Cards.Sum(c => c.Value);
+            if (playerViewItem.Score < maxWinScor && !takeCard)
             {
                 isGameEnded = false;
             }
@@ -477,7 +484,7 @@ namespace BlackJack.BusinessLogic.Services
             int scoreMaxValue = 21;
 
             List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
-            CountSum(ref playerViewItemList);
+            //CountSum(ref playerViewItemList);
             PlayerGameViewItem playerViewItem = playerViewItemList.SingleOrDefault(x => x.PlayerType == _personPlayerType);
 
             int score = playerViewItem.Score;
@@ -491,16 +498,29 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task<List<PlayerGameViewItem>> DefineTheWinner()
+        public async Task<List<PlayerGameViewItem>> GetWinners(List<PlayerGameViewItem> playerViewItemList)
         {
-            int maxWinScor = 21;
-            List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
-            var max = playerViewItemList.Where(x => x.Score <= maxWinScor).Max(x => x.Score);
+            int maxWinScore = 21;
+            //List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
+            //var max = playerViewItemList.Where(x => x.Score <= maxWinScore).Max(x => x.Score);
 
 
-            var winners = playerViewItemList.Where(x => x.Score == max).ToList();
+            //var winners = playerViewItemList.Where(x => x.Score == max).ToList();
 
-            return winners;
+            //WinnersGameView winnersView=new WinnersGameView();
+            //winnersView.Players = winners;
+
+            var players = playerViewItemList.Where(x => x.Score <= maxWinScore).ToList();
+            int max = players.Max(x => x.Score);
+            foreach (var item in playerViewItemList)
+            {
+                if (item.Score == max)
+                {
+                    item.Win = true;
+                }
+            }
+
+            return playerViewItemList;
         }
 
 

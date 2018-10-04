@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
+﻿using System.Web.Http;
+using System.Web.Http.Cors;
 using BlackJack.WebApi.App_Start;
 
 namespace BlackJack.WebApi
@@ -13,8 +11,9 @@ namespace BlackJack.WebApi
             // Web API configuration and services
             AutofacConfig.Initialize(config);
 
-            //var cors = new EnableCorsAttribute("*", "*", "*");
-            //config.EnableCors(cors);
+
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors);
 
             // Web API routes
             config.MapHttpAttributeRoutes();

@@ -1,25 +1,26 @@
 export interface StartGameView {
-  playerList: PlayerGameViewItem[];
+  Players: PlayerGameViewItem[];
 }
 
 
 export interface PlayerGameViewItem {
-  id: number;
-  name: string;
-  layerType: string;
-  gameNumber: number;
-  score: number;
-  round: number;
-  cardList: CardViewItem[];
+  Id: number;
+  Name: string;
+  PlayerType: string;
+  GameNumber: number;
+  Score: number;
+  Round: number;
+  Win: boolean;
+  CardList: CardViewItem[];
 }
 
 
 export interface CardViewItem {
-  id: number;
-  value: number;
+  Id: number;
+  Value: number;
 }
 
 export interface SetNameAndBotCount {
-  name: string,
-  botCount: number;
+  UserName: string,
+  BotCount: number;
 }

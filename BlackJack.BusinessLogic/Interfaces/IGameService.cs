@@ -25,7 +25,7 @@ namespace BlackJack.BusinessLogic.Interfaces
         Task<EnoughGameView> Enough();
         Task<bool> IsGameEnded(bool takeCard);
         Task<bool> IsUserBusted();
-        Task<List<PlayerGameViewItem>> DefineTheWinner();
+        Task<List<PlayerGameViewItem>> GetWinners(List<PlayerGameViewItem> playerViewItemList);
         Task<HistoryGameView> GetHistory();
     }
 }

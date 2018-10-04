@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using System.Web.Script.Services;
 using System.Web.Services;
@@ -17,6 +18,7 @@ namespace BlackJack.WebApi.Controllers
 {
 
     [RoutePrefix("api/game")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class GameController : ApiController
     {
         private readonly IGameService _gameService;
@@ -28,12 +30,19 @@ namespace BlackJack.WebApi.Controllers
 
         [HttpPost]
         [Route("start")]
-        public async Task<StartGameView> Start([FromBody] SetNameAndBotCount json)
+        public async Task<IHttpActionResult> Start([FromBody] SetNameAndBotCount json)
         {
-
-            StartGameView model = await _gameService.Start(json);
-
-            return model;
+            StartGameView model =new StartGameView();
+            try
+            {
+                 model = await _gameService.Start(json);
+            }
+            catch (Exception e)
+            {
+                BadRequest(e.Message);
+            }
+           
+            return Ok(model);
         }
 
 
@@ -63,8 +72,6 @@ namespace BlackJack.WebApi.Controllers
 
         [HttpGet]
         [Route("history")]
-        //[AllowAnonymous]
-        //[AcceptVerbs("GET", "POST")]
         public async Task<HistoryGameView> History()
         {
             HistoryGameView model = await _gameService.GetHistory();

@@ -25,6 +25,7 @@ namespace BlackJack.ViewModels
         public List<CardViewItem> Cards { get; set; }
         public int Score { get; set; }
         public int Round { get; set; }
+        public bool Win { get; set; }
         public PlayerGameViewItem()
         {
             Cards = new List<CardViewItem>();
