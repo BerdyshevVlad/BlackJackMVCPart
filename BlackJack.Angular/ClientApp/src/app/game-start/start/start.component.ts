@@ -5,8 +5,6 @@ import {SetNameAndBotCount} from "../../shared/models/start-game-view";
 import {MoreGameView} from "../../shared/models/more-game-view";
 import {EnoughGameView} from "../../shared/models/enough-game-view";
 import {PlayerGameViewItem} from "../../shared/models/start-game-view";
-import { Observable } from 'rxjs';
-//import * as $ from 'jquery';
 declare var $: any;
 
 @Component({
@@ -26,12 +24,10 @@ export class StartComponent {
   botCount: number;
   userName: string;
   gameIsRunning: boolean;
-  endOfGame: boolean;
 
   constructor(private http: HttpService) {
     var header = document.getElementById("header");
     header.innerHTML = "GAME IS STARTED";
-    this.endOfGame = false;
   }
 
   start() {
@@ -66,7 +62,8 @@ export class StartComponent {
 
       this.winnerList = this.playerList.filter(x => x.Win == true);
       if (this.winnerList.length != 0) {
-        console.log(this.winnerList);
+        $('#moreBtn').prop('disabled', true);
+        $('#enoughBtn').prop('disabled', true);
         $('#exampleModal').modal('show');
       }
     });
@@ -79,8 +76,9 @@ export class StartComponent {
       this.playerList = this.enoughView.Players;
 
       this.winnerList = this.playerList.filter(x => x.Win == true);
-      if (this.winnerList.length !=0) {
-        console.log(this.winnerList);
+      if (this.winnerList.length != 0) {
+        $('#moreBtn').prop('disabled', true);
+        $('#enoughBtn').prop('disabled', true);
         $('#exampleModal').modal('show');
       }
     });

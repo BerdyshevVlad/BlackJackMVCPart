@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using System.Web.Http.Description;
-using System.Web.Script.Services;
-using System.Web.Services;
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.ViewModels;
-using ExceptionLoggers;
-using Newtonsoft.Json;
 
 namespace BlackJack.WebApi.Controllers
 {
@@ -49,34 +40,56 @@ namespace BlackJack.WebApi.Controllers
 
         [HttpGet]
         [Route("more")]
-        [ResponseType(typeof(MoreGameView))]
-        public async Task<MoreGameView> More()
+        public async Task<IHttpActionResult> More()
         {
-            MoreGameView model = await _gameService.More();
+            MoreGameView model =new MoreGameView();
+            try
+            {
+                model = await _gameService.More();
+            }
+            catch (Exception e)
+            {
+                BadRequest(e.Message);
+            }
 
-            return model;
+            return Ok(model);
         }
 
 
 
         [HttpGet]
         [Route("enough")]
-        [ResponseType(typeof(EnoughGameView))]
-        public async Task<EnoughGameView> Enough()
+        public async Task<IHttpActionResult> Enough()
         {
-            EnoughGameView model = await _gameService.Enough();
+            EnoughGameView model =new EnoughGameView();
+            try
+            {
+                model = await _gameService.Enough();
+            }
+            catch (Exception e)
+            {
+                BadRequest(e.Message);
+            }
 
-            return model;
+            return Ok(model);
         }
 
 
         [HttpGet]
         [Route("history")]
-        public async Task<HistoryGameView> History()
+        public async Task<IHttpActionResult> History()
         {
-            HistoryGameView model = await _gameService.GetHistory();
+            HistoryGameView model =new HistoryGameView();
+            try
+            {
+                model = await _gameService.GetHistory();
+            }
+            catch (Exception e)
+            {
+                BadRequest(e.Message);
+            }
 
-            return model;
+            return Ok(model);
         }
     }
 }
