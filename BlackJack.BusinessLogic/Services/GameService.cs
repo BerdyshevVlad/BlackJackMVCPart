@@ -30,7 +30,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public int DefineCurrentRound()
+        private int DefineCurrentRound()
         {
             int _currentRound = 0;
             try
@@ -51,7 +51,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task InitializePlayers(int game, string userName)
+        private async Task InitializePlayers(int game, string userName)
         {
             var dealer = new Player();
             dealer.Name = "Dealer";
@@ -74,7 +74,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task SetBotCount(int botsCount, string userName)
+        private async Task SetBotCount(int botsCount, string userName)
         {
             int currentGame = _round + 1;
             int gameNumber = currentGame;
@@ -95,7 +95,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task<Dictionary<Player, List<Card>>> DefinePlayersFromLastGame()
+        private async Task<Dictionary<Player, List<Card>>> DefinePlayersFromLastGame()
         {
             List<PlayerCard> playerCards = _playerCardRepository.GetAll();
             int max = playerCards.Max(x => x.Player.GameNumber);
@@ -121,7 +121,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public int GenerateRandomValue()
+        private int GenerateRandomValue()
         {
             int minDeckValue = 1;
             int maxDeckValue = 52;
@@ -132,7 +132,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task<bool> IsCardAlreadyDrawned(int randomValue)
+        private async Task<bool> IsCardAlreadyDrawned(int randomValue)
         {
             IEnumerable<PlayerCard> playersCards = _playerCardRepository.GetAll();
             List<PlayerCard> playersOfCurrentRound = playersCards.Where(x => x.CurrentRound == _round).ToList();
@@ -148,7 +148,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task<Card> DrawCard()
+        private async Task<Card> DrawCard()
         {
 
             int randomValue = GenerateRandomValue();
@@ -166,7 +166,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task GiveCardToPlayer(Player player, Card Card)
+        private async Task GiveCardToPlayer(Player player, Card Card)
         {
             Player playerTmp = await _playerRepository.GetByIdAsync(player.Id);
             Card cardTmp = await _cardRepository.GetByIdAsync(Card.Id);
@@ -174,7 +174,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task GiveCardToEachPlayer()
+        private async Task GiveCardToEachPlayer()
         {
             IEnumerable<Player> playersList = await _playerRepository.GetAllAsync();
 
@@ -189,7 +189,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public void CountSum(ref List<PlayerGameViewItem> playerViewItemList)
+        private void CountSum(ref List<PlayerGameViewItem> playerViewItemList)
         {
             int scoreMaxValue = 21;
             int aceValueMax = 11;
@@ -253,7 +253,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task<List<PlayerGameViewItem>> GetScoreCount()
+        private async Task<List<PlayerGameViewItem>> GetScoreCount()
         {
             Dictionary<Player, List<Card>> playerCardsLastGame = await DefinePlayersFromLastGame();
 
@@ -279,7 +279,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task TakeCardIfNotEnough(bool takeCard)
+        private async Task TakeCardIfNotEnough(bool takeCard)
         {
             int scoreCountToStop = 17;
             List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
@@ -393,12 +393,6 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItemList.Add(playerViewItem);
             }
 
-
-
-            //CountSum(ref playerViewItemList);
-            //List<PlayerGameViewItem> winners = await GetWinners(playerViewItemList);
-
-
             CountSum(ref playerViewItemList);
             List<PlayerGameViewItem> winners = await GetWinners(playerViewItemList);
 
@@ -409,7 +403,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task<bool> IsGameEnded(bool takeCard)
+        private async Task<bool> IsGameEnded(bool takeCard)
         {
             int scoreCountToStop = 17;
             int maxWinScor = 21;
@@ -425,7 +419,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task<bool> IsUserBusted()
+        private async Task<bool> IsUserBusted()
         {
             int scoreMaxValue = 21;
             List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
@@ -441,7 +435,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task<List<PlayerGameViewItem>> GetWinners(List<PlayerGameViewItem> playerViewItemList)
+        private async Task<List<PlayerGameViewItem>> GetWinners(List<PlayerGameViewItem> playerViewItemList)
         {
             int maxWinScore = 21;
             var players = playerViewItemList.Where(x => x.Score <= maxWinScore).ToList();

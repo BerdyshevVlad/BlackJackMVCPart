@@ -17,8 +17,6 @@ namespace BlackJack.DataAccess.Repositories
             _db = context;
         }
 
-
-
         public async Task AddCardAsync(Player player, Card card, int currentRound)
         {
             Player tmpPlayer = await _db.Players.FindAsync(player.Id);

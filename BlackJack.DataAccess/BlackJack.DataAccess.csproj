@@ -125,7 +125,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutofacConfig.cs" />
-    <Compile Include="Context.Core\BlackJackContext.cs" />
     <Compile Include="Context.MVC\BlackJackContext.cs" />
     <Compile Include="Dapper.Repositories\BaseRepository.cs" />
     <Compile Include="Dapper.Repositories\CardRepository.cs" />
