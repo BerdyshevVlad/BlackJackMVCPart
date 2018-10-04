@@ -14,7 +14,7 @@ namespace BlackJack.DataAccess.Dapper.Repositories
 
         }
 
-        public bool IsExistAsync()
+        public bool IsExist()
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {

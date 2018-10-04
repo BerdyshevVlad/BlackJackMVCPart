@@ -166,10 +166,10 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task GiveCardToPlayer(Player player, Card Card)
+        public async Task GiveCardToPlayer(Player player, Card card)
         {
             Player playerTmp = await _playerRepository.GetByIdAsync(player.Id);
-            Card cardTmp = await _cardRepository.GetByIdAsync(Card.Id);
+            Card cardTmp = await _cardRepository.GetByIdAsync(card.Id);
             await _playerCardRepository.AddCardAsync(playerTmp, cardTmp, _round);
         }
 
@@ -302,7 +302,6 @@ namespace BlackJack.BusinessLogic.Services
             }
         }
 
-
         public async Task<MoreGameView> More()
         {
             bool takeCard = false;
@@ -360,8 +359,6 @@ namespace BlackJack.BusinessLogic.Services
             return moreViewModel;
         }
 
-
-
         public async Task<EnoughGameView> Enough()
         {
             bool takeCard = true;
@@ -392,12 +389,6 @@ namespace BlackJack.BusinessLogic.Services
 
                 playerViewItemList.Add(playerViewItem);
             }
-
-
-
-            //CountSum(ref playerViewItemList);
-            //List<PlayerGameViewItem> winners = await GetWinners(playerViewItemList);
-
 
             CountSum(ref playerViewItemList);
             List<PlayerGameViewItem> winners = await GetWinners(playerViewItemList);

@@ -53,7 +53,7 @@ export class StartComponent {
     });
     var startInputGroup = document.getElementById("startInputGroup");
     startInputGroup.hidden = true;
-  }
+  } 
 
   more() {
     this.http.getMore().subscribe(result => {

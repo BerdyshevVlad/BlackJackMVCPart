@@ -12,7 +12,7 @@ namespace BlackJack.DataAccess.Repositories
 
         }
 
-        public bool IsExistAsync()
+        public bool IsExist()
         {
             var isExist = _dbContext.Cards.Any();
             return isExist;

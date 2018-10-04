@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using BlackJack.DataAccess.Enums;
 using BlackJack.Entities;
@@ -26,7 +25,6 @@ namespace BlackJack.DataAccess.Context.MVC
     {
         protected override void Seed(BlackJackContext context)
         {
-            //var cardsList = new List<Card>();
             Card card = null;
             Array enumValuesList = Enum.GetValues(typeof(Rank));
 
