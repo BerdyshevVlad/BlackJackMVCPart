@@ -9,7 +9,7 @@ namespace BlackJack.BusinessLogic.Interfaces
     {
         int DefineCurrentRound();
         Task InitializePlayers(int game,string userName);
-        Task<GetDeckGameView> GetDeck();
+        //Task<GetDeckGameView> GetDeck();
         Task SetBotCount(int botsCount,string userName);
         Task<Dictionary<Player, List<Card>>> DefinePlayersFromLastGame();
         int GenerateRandomValue();

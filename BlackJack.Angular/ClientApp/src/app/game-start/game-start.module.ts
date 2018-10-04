@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { StartComponent } from './start/start.component';
 import { GameStartRoutingModule } from "./game-start-routing.module";
-import { FormsModule } from '@angular/forms';
+import {SharedModule} from "../shared/modules/shared.module";
 
 @NgModule({
   imports: [
-    CommonModule,
-    FormsModule,
+    SharedModule.forRoot(),
     GameStartRoutingModule
   ],
   declarations: [StartComponent]

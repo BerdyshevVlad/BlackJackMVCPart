@@ -180,6 +180,8 @@
     <TypeScriptCompile Include="ClientApp\src\app\shared\models\history-game-view.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\shared\models\more-game-view.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\shared\models\start-game-view.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\modules\shared.module.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\modules\shared.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\shared\services\http.service.spec.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\shared\services\http.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\environments\environment.prod.ts" />

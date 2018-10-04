@@ -74,31 +74,6 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        public async Task<GetDeckGameView> GetDeck()
-        {
-            var cardsViewModel = new GetDeckGameView();
-            try
-            {
-                IEnumerable<Card> cardListCollection = await _cardRepository.GetAllAsync();
-                foreach (var card in cardListCollection)
-                {
-                    cardsViewModel.Cards.Add(new DeckViewItem
-                    {
-                        Id = card.Id,
-                        Value = card.Value
-                    });
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-
-            return cardsViewModel;
-        }
-
-
         public async Task SetBotCount(int botsCount, string userName)
         {
             int currentGame = _round + 1;
@@ -420,6 +395,10 @@ namespace BlackJack.BusinessLogic.Services
 
 
 
+            //CountSum(ref playerViewItemList);
+            //List<PlayerGameViewItem> winners = await GetWinners(playerViewItemList);
+
+
             CountSum(ref playerViewItemList);
             List<PlayerGameViewItem> winners = await GetWinners(playerViewItemList);
 
@@ -436,8 +415,8 @@ namespace BlackJack.BusinessLogic.Services
             int maxWinScor = 21;
             List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
             var isGameEnded = playerViewItemList.TrueForAll(c => c.Score >= scoreCountToStop);
-            PlayerGameViewItem playerViewItem = playerViewItemList.SingleOrDefault(x => x.PlayerType == _personPlayerType);
-            if (playerViewItem.Score < maxWinScor && !takeCard)
+            int userScore = playerViewItemList.SingleOrDefault(x => x.PlayerType == _personPlayerType).Score;
+            if (userScore < maxWinScor && !takeCard)
             {
                 isGameEnded = false;
             }
@@ -452,8 +431,7 @@ namespace BlackJack.BusinessLogic.Services
             List<PlayerGameViewItem> playerViewItemList = await GetScoreCount();
             PlayerGameViewItem playerViewItem = playerViewItemList.SingleOrDefault(x => x.PlayerType == _personPlayerType);
 
-            int score = playerViewItem.Score;
-            if (score >= scoreMaxValue)
+            if (playerViewItem.Score >= scoreMaxValue)
             {
                 return true;
 
