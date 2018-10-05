@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BlackJack.Entities;
 
 namespace BlackJack.DataAccess.Interfaces
 {
-    public interface IBaseRepository<T>
+    public interface IBaseRepository<T> where T:BaseEntity
     {
-        Task InsertAsync(T item);
-        Task DeleteAsync(int id);
-        IEnumerable<T> FindAsync(Func<T, bool> predicate);
-        Task<T> GetByIdAsync(int id);
-        Task<IEnumerable<T>> GetAllAsync();
-        Task UpdateAsync(T item);
+        Task Insert(T item);
+        Task Delete(int id);
+        Task<IEnumerable<T>> Find(Func<T, bool> predicate);    ///////
+        Task<T> GetById(int id);
+        Task<IEnumerable<T>> GetAll();
+        Task Update(T item);
     }
 }

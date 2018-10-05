@@ -17,7 +17,7 @@ namespace BlackJack.DataAccess.Dapper.Repositories
 
         }
 
-        public async Task AddCardAsync(Player player, Card card, int currentRound)
+        public async Task AddCard(Player player, Card card, int currentRound)
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
@@ -33,21 +33,13 @@ namespace BlackJack.DataAccess.Dapper.Repositories
             }
         }
 
-        public List<PlayerCard> GetAll()
+        public async Task<List<PlayerCard>> GetAll()
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
-                try
-                {
                     var playerCardsList = db.GetAll<PlayerCard>().ToList();
                     return playerCardsList;
                 }
-                catch (Exception ex)
-                {
-                    var msg = ex.Message;
-                    return null;
-                }
             }
         }
-    }
 }

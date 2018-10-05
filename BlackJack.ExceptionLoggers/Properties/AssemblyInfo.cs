@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ExceptionLoggers")]
+[assembly: AssemblyTitle("BlackJack.ExceptionLoggers")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ExceptionLoggers")]
+[assembly: AssemblyProduct("BlackJack.ExceptionLoggers")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("519cc58d-9bfc-4565-9af8-a4e2d33cab15")]
+[assembly: Guid("c0d81afa-1b84-4a11-ae71-396933004238")]
 
 // Version information for an assembly consists of the following four values:
 //

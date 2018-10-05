@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BlackJack.DataAccess.Context.MVC;
+﻿using BlackJack.DataAccess.Context.MVC;
 using BlackJack.DataAccess.Interfaces;
 using BlackJack.Entities;
 

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using BlackJack.Entities;
+﻿using System.Threading.Tasks;
 using BlackJack.ViewModels;
 
 namespace BlackJack.BusinessLogic.Interfaces

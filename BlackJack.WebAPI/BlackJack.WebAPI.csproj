@@ -140,7 +140,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -165,10 +164,6 @@
     <ProjectReference Include="..\BlackJack.ViewModels\BlackJack.ViewModels.csproj">
       <Project>{dc7d69ed-3c0d-4b14-912e-e976c717509d}</Project>
       <Name>BlackJack.ViewModels</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExceptionLoggers\ExceptionLoggers.csproj">
-      <Project>{519CC58D-9BFC-4565-9AF8-A4E2D33CAB15}</Project>
-      <Name>ExceptionLoggers</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

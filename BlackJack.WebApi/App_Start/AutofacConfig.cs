@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
+﻿using System.Configuration;
 using System.Reflection;
-using System.Web;
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;

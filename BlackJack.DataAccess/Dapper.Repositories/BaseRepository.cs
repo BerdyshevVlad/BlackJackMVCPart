@@ -21,7 +21,7 @@ namespace BlackJack.DataAccess.Dapper.Repositories
         }
 
 
-        public async Task DeleteAsync(int id)
+        public async Task Delete(int id)
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
@@ -30,7 +30,7 @@ namespace BlackJack.DataAccess.Dapper.Repositories
             }
         }
 
-        public IEnumerable<T> FindAsync(Func<T, bool> predicate)
+        public async Task<IEnumerable<T>> Find(Func<T, bool> predicate)           //////////////
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
@@ -39,7 +39,7 @@ namespace BlackJack.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAll()
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
@@ -48,7 +48,7 @@ namespace BlackJack.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetById(int id)
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
@@ -57,7 +57,7 @@ namespace BlackJack.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task InsertAsync(T item)
+        public async Task Insert(T item)
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
@@ -65,7 +65,7 @@ namespace BlackJack.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task UpdateAsync(T item)
+        public async Task Update(T item)
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {

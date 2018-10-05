@@ -1,9 +1,10 @@
-﻿using BlackJack.Entities;
+﻿using System.Threading.Tasks;
+using BlackJack.Entities;
 
 namespace BlackJack.DataAccess.Interfaces
 {
     public interface ICardRepository : IBaseRepository<Card>
     {
-        bool IsExistAsync();
+        Task<bool> IsExist();
     }
 }

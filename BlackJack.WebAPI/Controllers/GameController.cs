@@ -75,6 +75,7 @@ namespace BlackJack.WebApi.Controllers
         }
 
 
+
         [HttpGet]
         [Route("history")]
         public async Task<IHttpActionResult> History()

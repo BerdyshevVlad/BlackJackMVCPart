@@ -2816,13 +2816,13 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BlackJack.ExceptionLoggers\BlackJack.ExceptionLoggers.csproj">
+      <Project>{C0D81AFA-1B84-4A11-AE71-396933004238}</Project>
+      <Name>BlackJack.ExceptionLoggers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BlackJack.ViewModels\BlackJack.ViewModels.csproj">
       <Project>{DC7D69ED-3C0D-4B14-912E-E976C717509D}</Project>
       <Name>BlackJack.ViewModels</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExceptionLoggers\ExceptionLoggers.csproj">
-      <Project>{519CC58D-9BFC-4565-9AF8-A4E2D33CAB15}</Project>
-      <Name>ExceptionLoggers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

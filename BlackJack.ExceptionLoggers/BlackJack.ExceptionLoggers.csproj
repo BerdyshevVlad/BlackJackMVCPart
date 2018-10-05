@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{519CC58D-9BFC-4565-9AF8-A4E2D33CAB15}</ProjectGuid>
+    <ProjectGuid>{C0D81AFA-1B84-4A11-AE71-396933004238}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExceptionLoggers</RootNamespace>
-    <AssemblyName>ExceptionLoggers</AssemblyName>
+    <RootNamespace>BlackJack.ExceptionLoggers</RootNamespace>
+    <AssemblyName>BlackJack.ExceptionLoggers</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -73,10 +73,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\BlackJack.DataAccess\BlackJack.DataAccess.csproj">
       <Project>{FD2E4BEF-B946-4D3E-B44F-1CB98D7B14F8}</Project>
       <Name>BlackJack.DataAccess</Name>
@@ -85,6 +81,10 @@
       <Project>{9F70C746-6966-4999-B6A8-8E0C00D3227C}</Project>
       <Name>BlackJack.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

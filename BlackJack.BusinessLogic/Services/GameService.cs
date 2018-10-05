@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.Entities;
 using BlackJack.ViewModels;
-using BlackJack.DataAccess.Enums;
 
 namespace BlackJack.BusinessLogic.Services
 {
@@ -26,16 +25,16 @@ namespace BlackJack.BusinessLogic.Services
             _cardRepository = cardRepository;
             _playerRepository = playerRepository;
             _playerCardRepository = playerCardRepository;
-            _round = DefineCurrentRound();
+            _round = DefineCurrentRound().Result;
         }
 
 
-        private int DefineCurrentRound()
+        private async Task<int> DefineCurrentRound()
         {
             int _currentRound = 0;
             try
             {
-                List<PlayerCard> gamePlayersList = _playerCardRepository.GetAll();
+                List<PlayerCard> gamePlayersList = await _playerCardRepository.GetAll();
                 int maxRound = gamePlayersList.Max(x => x.CurrentRound);
                 if (maxRound > 0)
                 {
@@ -64,8 +63,8 @@ namespace BlackJack.BusinessLogic.Services
 
             try
             {
-                await _playerRepository.InsertAsync(dealer);
-                await _playerRepository.InsertAsync(playerPerson);
+                await _playerRepository.Insert(dealer);
+                await _playerRepository.Insert(playerPerson);
             }
             catch (Exception ex)
             {
@@ -83,7 +82,7 @@ namespace BlackJack.BusinessLogic.Services
             {
                 for (int i = 0; i < botsCount; i++)
                 {
-                    await _playerRepository.InsertAsync(new Player
+                    await _playerRepository.Insert(new Player
                     { Name = $"Bot{i}", PlayerType = "Bot", GameNumber = gameNumber });
                 }
             }
@@ -97,7 +96,7 @@ namespace BlackJack.BusinessLogic.Services
 
         private async Task<Dictionary<Player, List<Card>>> DefinePlayersFromLastGame()
         {
-            List<PlayerCard> playerCards = _playerCardRepository.GetAll();
+            List<PlayerCard> playerCards = await _playerCardRepository.GetAll();
             int max = playerCards.Max(x => x.Player.GameNumber);
             var playersLastGame = playerCards.Where(p => p.Player.GameNumber == _round).ToList();
             Dictionary<Player, List<Card>> playerCardsDictionary = new Dictionary<Player, List<Card>>();
@@ -121,7 +120,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        private int GenerateRandomValue()
+        private async Task<int> GenerateRandomValue()
         {
             int minDeckValue = 1;
             int maxDeckValue = 52;
@@ -134,7 +133,7 @@ namespace BlackJack.BusinessLogic.Services
 
         private async Task<bool> IsCardAlreadyDrawned(int randomValue)
         {
-            IEnumerable<PlayerCard> playersCards = _playerCardRepository.GetAll();
+            IEnumerable<PlayerCard> playersCards = await _playerCardRepository.GetAll();
             List<PlayerCard> playersOfCurrentRound = playersCards.Where(x => x.CurrentRound == _round).ToList();
             foreach (var pc in playersOfCurrentRound)
             {
@@ -151,16 +150,16 @@ namespace BlackJack.BusinessLogic.Services
         private async Task<Card> DrawCard()
         {
 
-            int randomValue = GenerateRandomValue();
+            int randomValue = await GenerateRandomValue();
             bool isCurrentCardDrawned = await IsCardAlreadyDrawned(randomValue);
 
             for (; isCurrentCardDrawned == true;)
             {
-                randomValue = GenerateRandomValue();
+                randomValue = await GenerateRandomValue();
                 isCurrentCardDrawned = await IsCardAlreadyDrawned(randomValue);
             }
 
-            Card card = await _cardRepository.GetByIdAsync(randomValue);
+            Card card = await _cardRepository.GetById(randomValue);
 
             return card;
         }
@@ -168,15 +167,15 @@ namespace BlackJack.BusinessLogic.Services
 
         private async Task GiveCardToPlayer(Player player, Card Card)
         {
-            Player playerTmp = await _playerRepository.GetByIdAsync(player.Id);
-            Card cardTmp = await _cardRepository.GetByIdAsync(Card.Id);
-            await _playerCardRepository.AddCardAsync(playerTmp, cardTmp, _round);
+            Player playerTmp = await _playerRepository.GetById(player.Id);
+            Card cardTmp = await _cardRepository.GetById(Card.Id);
+            await _playerCardRepository.AddCard(playerTmp, cardTmp, _round);
         }
 
 
         private async Task GiveCardToEachPlayer()
         {
-            IEnumerable<Player> playersList = await _playerRepository.GetAllAsync();
+            IEnumerable<Player> playersList = await _playerRepository.GetAll();
 
             int max = playersList.Max(x => x.GameNumber);
             IEnumerable<Player> playerList = playersList.ToList().Where(x => x.GameNumber == max);
@@ -189,7 +188,7 @@ namespace BlackJack.BusinessLogic.Services
         }
 
 
-        private void CountSum(ref List<PlayerGameViewItem> playerViewItemList)
+        private async Task<List<PlayerGameViewItem>> CountSum(List<PlayerGameViewItem> playerViewItemList)
         {
             int scoreMaxValue = 21;
             int aceValueMax = 11;
@@ -211,6 +210,8 @@ namespace BlackJack.BusinessLogic.Services
 
                 playerCards.Score = sum;
             }
+
+            return playerViewItemList;
         }
 
 
@@ -244,10 +245,8 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItemList.Add(playerViewItem);
             }
 
-            CountSum(ref playerViewItemList);
-
             StartGameView startViewModel = new StartGameView();
-            startViewModel.Players = playerViewItemList;
+            startViewModel.Players = await CountSum(playerViewItemList);
 
             return startViewModel;
         }
@@ -273,7 +272,7 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItemList.Add(playerViewItem);
             }
 
-            CountSum(ref playerViewItemList);
+            playerViewItemList = await CountSum(playerViewItemList);
 
             return playerViewItemList;
         }
@@ -288,14 +287,14 @@ namespace BlackJack.BusinessLogic.Services
             {
                 if (playerView.Score < scoreCountToStop && playerView.PlayerType != _personPlayerType)
                 {
-                    Player player = await _playerRepository.GetByIdAsync(playerView.Id);
+                    Player player = await _playerRepository.GetById(playerView.Id);
                     Card card = await DrawCard();
                     await GiveCardToPlayer(player, card);
                 }
 
                 if (playerView.PlayerType == _personPlayerType && takeCard)
                 {
-                    Player player = await _playerRepository.GetByIdAsync(playerView.Id);
+                    Player player = await _playerRepository.GetById(playerView.Id);
                     Card card = await DrawCard();
                     await GiveCardToPlayer(player, card);
                 }
@@ -352,10 +351,8 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItemList.Add(playerViewItem);
             }
 
-            CountSum(ref playerViewItemList);
-
             MoreGameView moreViewModel = new MoreGameView();
-            moreViewModel.Players = playerViewItemList;
+            moreViewModel.Players = await CountSum(playerViewItemList);
 
             return moreViewModel;
         }
@@ -393,7 +390,7 @@ namespace BlackJack.BusinessLogic.Services
                 playerViewItemList.Add(playerViewItem);
             }
 
-            CountSum(ref playerViewItemList);
+            playerViewItemList = await CountSum(playerViewItemList);
             List<PlayerGameViewItem> winners = await GetWinners(playerViewItemList);
 
             EnoughGameView enoughViewModel = new EnoughGameView();
@@ -454,7 +451,7 @@ namespace BlackJack.BusinessLogic.Services
 
         public async Task<HistoryGameView> GetHistory()
         {
-            List<PlayerCard> playersList = _playerCardRepository.GetAll();
+            List<PlayerCard> playersList = await _playerCardRepository.GetAll();
             int maxRound = playersList.Max(r => r.CurrentRound);
             var history = new HistoryGameView();
             var tmpPlayerItemList = new List<PlayerGameViewItem>();
@@ -491,9 +488,7 @@ namespace BlackJack.BusinessLogic.Services
                     tmpPlayerItemList.Add(playerModel);
                 }
             }
-
-            CountSum(ref tmpPlayerItemList);
-            history.Players = tmpPlayerItemList;
+            history.Players = await CountSum(tmpPlayerItemList); ;
 
             return history;
         }

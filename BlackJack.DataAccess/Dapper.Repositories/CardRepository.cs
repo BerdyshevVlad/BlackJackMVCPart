@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using BlackJack.DataAccess.Interfaces;
 using BlackJack.Entities;
 using Dapper.Contrib.Extensions;
@@ -14,7 +15,7 @@ namespace BlackJack.DataAccess.Dapper.Repositories
 
         }
 
-        public bool IsExistAsync()
+        public async Task<bool> IsExist()
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
