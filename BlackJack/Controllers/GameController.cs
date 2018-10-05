@@ -1,6 +1,8 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web.Http.Results;
 using System.Web.Mvc;
 using BlackJack.ExceptionLoggers;
 using BlackJack.ViewModels;
@@ -32,17 +34,28 @@ namespace BlackJack.Controllers
         [HttpPost]
         public async Task<ActionResult> Start(SetNameAndBotCount userNameAndBotCount)
         {
-
-            using (var http = new HttpClient())
+            try
             {
-                string json = JsonConvert.SerializeObject(userNameAndBotCount);
-                HttpContent content = new StringContent(json);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                HttpResponseMessage response = await http.PostAsync(BASE_URL + "/start", content);
+                using (var http = new HttpClient())
+                {
+                    string json = JsonConvert.SerializeObject(userNameAndBotCount);
+                    HttpContent content = new StringContent(json);
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    HttpResponseMessage response = await http.PostAsync(BASE_URL + "/start", content);
 
-                StartGameView model = response.Content.ReadAsAsync<StartGameView>().Result;
+                    StartGameView model = response.Content.ReadAsAsync<StartGameView>().Result;
 
-                return PartialView("_Play", model.Players);
+                    if (model == null)
+                    {
+                        throw new Exception("Not found");
+                    }
+
+                    return PartialView("_Play", model.Players);
+                }
+            }
+            catch (Exception e)
+            {
+                return View("Error", e.Message);
             }
         }
 
@@ -51,12 +64,24 @@ namespace BlackJack.Controllers
         [HttpGet]
         public async Task<ActionResult> More()
         {
-            using (var http = new HttpClient())
+            try
             {
-                HttpResponseMessage response = await http.GetAsync(BASE_URL + "/more");
-                MoreGameView model = response.Content.ReadAsAsync<MoreGameView>().Result;
+                using (var http = new HttpClient())
+                {
+                    HttpResponseMessage response = await http.GetAsync(BASE_URL + "/more");
+                    MoreGameView model = response.Content.ReadAsAsync<MoreGameView>().Result;
 
-                return PartialView("_Play", model.Players);
+                    if (model == null)
+                    {
+                        throw new Exception("Not found");
+                    }
+
+                    return PartialView("_Play", model.Players);
+                }
+            }
+            catch (Exception e)
+            {
+                return View("Error", e.Message);
             }
         }
 
@@ -65,12 +90,24 @@ namespace BlackJack.Controllers
         [HttpGet]
         public async Task<ActionResult> Enough()
         {
-            using (var http = new HttpClient())
+            try
             {
-                HttpResponseMessage response = await http.GetAsync(BASE_URL + "/enough");
-                EnoughGameView model = response.Content.ReadAsAsync<EnoughGameView>().Result;
+                using (var http = new HttpClient())
+                {
+                    HttpResponseMessage response = await http.GetAsync(BASE_URL + "/enough");
+                    EnoughGameView model = response.Content.ReadAsAsync<EnoughGameView>().Result;
 
-                return PartialView("_Play", model.Players);
+                    if (model == null)
+                    {
+                        throw new Exception("Not found");
+                    }
+
+                    return PartialView("_Play", model.Players);
+                }
+            }
+            catch (Exception e)
+            {
+                return View("Error", e.Message);
             }
         }
 
@@ -79,12 +116,24 @@ namespace BlackJack.Controllers
         [HttpGet]
         public async Task<ActionResult> History()
         {
-            using (var http = new HttpClient())
+            try
             {
-                HttpResponseMessage response = await http.GetAsync(BASE_URL + "/history");
-                HistoryGameView model = response.Content.ReadAsAsync<HistoryGameView>().Result;
+                using (var http = new HttpClient())
+                {
+                    HttpResponseMessage response = await http.GetAsync(BASE_URL + "/history");
+                    HistoryGameView model = response.Content.ReadAsAsync<HistoryGameView>().Result;
 
-                return View("History", "", JsonConvert.SerializeObject(model.Players));
+                    if (model == null)
+                    {
+                        throw new Exception("Not found");
+                    }
+
+                    return View("History", "", JsonConvert.SerializeObject(model.Players));
+                }
+            }
+            catch (Exception e)
+            {
+                return View("Error",e.Message);
             }
         }
     }

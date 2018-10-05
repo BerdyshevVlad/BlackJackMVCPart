@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using BlackJack.BusinessLogic.Interfaces;
+using BlackJack.ExceptionLoggers;
 using BlackJack.ViewModels;
 
 namespace BlackJack.WebApi.Controllers
@@ -21,6 +22,7 @@ namespace BlackJack.WebApi.Controllers
 
         [HttpPost]
         [Route("start")]
+        [ExceptionLogger]
         public async Task<IHttpActionResult> Start([FromBody] SetNameAndBotCount json)
         {
             StartGameView model =new StartGameView();
@@ -40,6 +42,7 @@ namespace BlackJack.WebApi.Controllers
 
         [HttpGet]
         [Route("more")]
+        [ExceptionLogger]
         public async Task<IHttpActionResult> More()
         {
             MoreGameView model =new MoreGameView();
@@ -59,6 +62,7 @@ namespace BlackJack.WebApi.Controllers
 
         [HttpGet]
         [Route("enough")]
+        [ExceptionLogger]
         public async Task<IHttpActionResult> Enough()
         {
             EnoughGameView model =new EnoughGameView();
@@ -78,6 +82,7 @@ namespace BlackJack.WebApi.Controllers
 
         [HttpGet]
         [Route("history")]
+        [ExceptionLogger]
         public async Task<IHttpActionResult> History()
         {
             HistoryGameView model =new HistoryGameView();
