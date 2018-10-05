@@ -1,19 +1,15 @@
-﻿using System.Web.Http;
-using System.Web.Http.Cors;
-using BlackJack.WebApi.App_Start;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
 
-namespace BlackJack.WebApi
+namespace BlackJack.PortalWeb
 {
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            AutofacConfig.Initialize(config);
-
-
-            var cors = new EnableCorsAttribute("*", "*", "*");
-            config.EnableCors(cors);
 
             // Web API routes
             config.MapHttpAttributeRoutes();
@@ -22,7 +18,6 @@ namespace BlackJack.WebApi
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
-                
             );
         }
     }

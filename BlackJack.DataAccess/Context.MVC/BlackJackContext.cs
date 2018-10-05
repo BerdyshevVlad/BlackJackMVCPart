@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
-using BlackJack.DataAccess.Enums;
+using System.Linq;
+using BlackJack.Entities.Enums;
 using BlackJack.Entities;
 
 namespace BlackJack.DataAccess.Context.MVC
@@ -25,58 +27,35 @@ namespace BlackJack.DataAccess.Context.MVC
     {
         protected override void Seed(BlackJackContext context)
         {
-            Card card = null;
-            Array enumValuesList = Enum.GetValues(typeof(Rank));
-
-            int cardMinValue = 2;
-            int cardMaxValue = 14;
-            int rankMinValue = 0;
-            int rankMaxValue = 14;
-            int enumJackValue = 11;
-            int enumKingValue = 13;
-            int JackQueenKingValues = 10;
-            int AceValue = 11;
-            int enumAceVlue = 14;
-
-            try
+            var _cards = new List<Card>();
+            int minCardValue;
+            for (int i = 0; i < Enum.GetNames(typeof(Suit)).Length; i++)
             {
-                foreach (var suit in Enum.GetNames(typeof(Suit)))
+                minCardValue = 2;
+                for (int j = 0; j < Enum.GetNames(typeof(Rank)).Length; j++)
                 {
-                    for (int value = cardMinValue, rankValue = rankMinValue;
-                        value <= cardMaxValue && rankValue <= rankMaxValue;
-                        value++, rankValue++)
+                    var card = new Card();
+                    card.Rank = (Rank)j;
+                    card.Suit = (Suit)i;
+                    _cards.Add(card);
+
+                    if (j < (int)Rank.Ten)
                     {
-                        if (value >= enumJackValue && value <= enumKingValue)
-                        {
-                            card = new Card
-                            {
-                                Value = JackQueenKingValues,
-                                Suit = suit,
-                                Rank = enumValuesList.GetValue(rankValue).ToString()
-                            };
-                        }
-
-                        if (value == enumAceVlue)
-                        {
-                            card = new Card
-                            { Value = AceValue, Suit = suit, Rank = enumValuesList.GetValue(rankValue).ToString() };
-                        }
-
-                        if (value < enumJackValue)
-                        {
-                            card = new Card
-                            { Value = value, Suit = suit, Rank = enumValuesList.GetValue(rankValue).ToString() };
-                        }
-
-                        context.Cards.Add(card);
+                        _cards.Last().Value = minCardValue++;
                     }
+                    if (j == (int)Rank.Ace)
+                    {
+                        _cards.Last().Value = ++minCardValue;
+                    }
+                    if (j >= (int)Rank.Ten && j != (int)Rank.Ace)
+                    {
+                        _cards.Last().Value = minCardValue;
+                    }
+
+                    context.Cards.Add(card);
                 }
-                context.SaveChanges();
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            context.SaveChanges();
         }
     }
 }

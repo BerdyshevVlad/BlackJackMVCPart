@@ -161,6 +161,10 @@
       <Project>{b88be75f-39a8-4673-971d-ccf3631f2edf}</Project>
       <Name>BlackJack.BusinessLogic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BlackJack.ExceptionLoggers\BlackJack.ExceptionLoggers.csproj">
+      <Project>{C0D81AFA-1B84-4A11-AE71-396933004238}</Project>
+      <Name>BlackJack.ExceptionLoggers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BlackJack.ViewModels\BlackJack.ViewModels.csproj">
       <Project>{dc7d69ed-3c0d-4b14-912e-e976c717509d}</Project>
       <Name>BlackJack.ViewModels</Name>
